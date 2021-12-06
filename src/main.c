@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/04 16:28:57 by aignacz           #+#    #+#             */
-/*   Updated: 2021/12/06 23:04:12 by mwen             ###   ########.fr       */
+/*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
+/*   Updated: 2021/12/06 23:19:57 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,20 @@
 
 void	initialize(t_data *data)
 {
-	printf("Minishell 0.0\n");
+	printf("\n---------------------------------------------\n");
+	printf("--------------- Minishell 0.0 ---------------\n");
+	printf("---------------------------------------------\n\n");
 	data->end = 0;
+	data->argv = NULL;
+	data->argc = 0;
+}
+
+void	destroy(t_data *data)
+{
+	while ((data->argc)-- > 0)
+		free(*(data->argv + data->argc));
+	if (data->argv)
+		free(data->argv);
 }
 
 void	execute_command(char *line, t_data *data)
@@ -49,7 +61,6 @@ char	*check_path_in_env(char **envp)
 	char	*path;
 
 	i = -1;
-	path = NULL;
 	while (envp[++i])
 	{
 		if (ft_strnstr(envp[i], "PATH", ft_strlen(envp[i])))
@@ -70,6 +81,14 @@ int	check_command(char *line, t_data *data)
 	char	*full_path;
 	int		i;
 
+	//if you wanna check multiple commands here is what you coded
+	/*
+		data->argv = ft_split(line, ' ');
+	data->argc = 0;
+	while (*(data->argv + data->argc))
+		data->argc++;
+	printf("Number of arguments: %i\n", data->argc);
+	*/
 	i = -1;
 	env_paths = check_path_in_env(data->envp);
 	if (!env_paths)
@@ -96,17 +115,22 @@ int	check_command(char *line, t_data *data)
 int	main(void)
 {
 	char	*line;
+	char	*promt;
+	char	path[PATH_MAX];
 	t_data	data;
 	extern char	**environ;
 
-	data.end = 0;
+	initialize(&data);
 	while (!data.end)
 	{
-		printf(">>>");
-		line = readline(NULL);
+		getcwd(path, PATH_MAX);
+		promt = ft_strjoin(path, ":> ");
+		line = readline(promt);
+		free(promt);
 		data.envp = environ;
 		if (!check_command(line, &data))
 			execute_command(line, &data);
 	}
+	destroy(&data);
 	return (0);
 }

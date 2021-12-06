@@ -6,7 +6,7 @@
 #    By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/12 12:00:25 by mwen              #+#    #+#              #
-#    Updated: 2021/07/26 11:11:24 by mwen             ###   ########.fr        #
+#    Updated: 2021/06/18 17:13:54 by mwen             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,9 +32,11 @@ all:			$(NAME)
 
 $(NAME):		$(OBJS) $(OBJS_B)
 				ar rcs $(NAME) $(OBJS) $(OBJS_B)
+				$(RM) $(OBJS) $(OBJS_B)
 
 bonus:			$(OBJS) $(OBJS_B)
 				ar rcs $(NAME) $(OBJS) $(OBJS_B)
+				$(RM) $(OBJS) $(OBJS_B)
 
 %.o: 			%.c	$(HEADER_FILES)
 				$(CC) -c $(CFLAGS) -o $@ $<

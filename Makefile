@@ -32,6 +32,9 @@ clean:
 fclean:		clean
 			${RM} ${NAME}
 
+libftclean:
+			cd ${LIBF} && ${MAKE} fclean
+
 re:			fclean all
 
 .PHONY: all clean fclean re

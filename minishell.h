@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/04 16:29:35 by aignacz           #+#    #+#             */
-/*   Updated: 2021/12/06 22:39:51 by mwen             ###   ########.fr       */
+/*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
+/*   Updated: 2021/12/06 23:13:23 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,22 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
+# include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/syslimits.h>
 
 typedef struct s_data
 {
+	int		end;
+	int		argc;
+	char	**argv;
 	char	*cmd_with_path;
 	char	**envp;
-	int		end;
+
 }	t_data;
 
 #endif

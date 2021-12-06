@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 13:58:34 by mwen              #+#    #+#             */
-/*   Updated: 2021/08/31 15:05:36 by mwen             ###   ########.fr       */
+/*   Updated: 2021/06/17 19:33:31 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef struct s_list
 {
 	void			*content;
 	struct s_list	*next;
-}				t_list;
+}					t_list;
 
 int		ft_atoi(const char *s);
 void	ft_bzero(void *s, size_t n);

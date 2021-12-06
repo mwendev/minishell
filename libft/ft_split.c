@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 22:31:44 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/06 22:45:07 by mwen             ###   ########.fr       */
+/*   Updated: 2021/05/28 18:10:50 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	**ft_split(char const *s, char c)
 	int		start;
 	char	**output;
 
-	output = (char **)ft_calloc(get_output_len(s, c) + 1, sizeof(char *));
+	output = (char **)malloc((get_output_len(s, c) + 1) * sizeof(char *));
 	if (!s || !output)
 		return (NULL);
 	i = 0;
@@ -72,5 +72,6 @@ char	**ft_split(char const *s, char c)
 		}
 		i++;
 	}
+	output[j] = 0;
 	return (output);
 }
