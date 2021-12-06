@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/15 17:08:40 by aignacz           #+#    #+#             */
-/*   Updated: 2021/05/19 00:26:21 by aignacz          ###   ########.fr       */
+/*   Created: 2021/05/14 12:45:14 by mwen              #+#    #+#             */
+/*   Updated: 2021/05/19 15:11:11 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,12 @@
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	unsigned char	*c1;
-	unsigned char	*c2;
-	size_t			i;
-	int				out;
-
-	c1 = (unsigned char *) s1;
-	c2 = (unsigned char *) s2;
-	i = 0;
-	out = 0;
-	if (n == 0)
-		out = 0;
-	else
+	while (n-- && (*s1 | *s2))
 	{
-		while (i < n - 1 && *(c1 + i) && *(c2 + i) && *(c1 + i) == *(c2 + i))
-			i++;
-		out = *(c1 + i) - *(c2 + i);
+		if (*(unsigned char *)s1 != *(unsigned char *)s2)
+			return (*(unsigned char *)s1 - *(unsigned char *)s2);
+		s1++;
+		s2++;
 	}
-	return (out);
+	return (0);
 }

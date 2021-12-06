@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/15 16:28:19 by aignacz           #+#    #+#             */
-/*   Updated: 2021/06/04 23:17:54 by aignacz          ###   ########.fr       */
+/*   Created: 2021/05/12 19:21:34 by mwen              #+#    #+#             */
+/*   Updated: 2021/06/14 19:57:46 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,23 @@
 
 char	*ft_strnstr(const char	*big, const char *little, size_t len)
 {
-	int		found;
-	size_t	little_len;
 	size_t	i;
-	char	*res;
+	size_t	j;
+	size_t	llen;
 
-	found = -1;
 	i = 0;
-	little_len = ft_strlen(little);
-	if (little_len == 0)
-		found = 0;
-	while ((i + little_len) <= len && *(big + i) && found != 0)
+	llen = ft_strlen((char *)little);
+	if (llen == 0 || big == little)
+		return ((char *)big);
+	while (i < len && big[i])
 	{
-		found = ft_memcmp(big + i, little, little_len);
-		if (found != 0)
-			i++;
+		j = 0;
+		while (big[i + j] && j < llen && i + j < len
+			&& big[i + j] == little[j])
+			j++;
+		if (j == llen)
+			return ((char *)big + i);
+		i++;
 	}
-	if (found == 0)
-		res = (char *) big + i;
-	else
-		res = 0;
-	return (res);
+	return (0);
 }

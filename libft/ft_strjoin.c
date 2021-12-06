@@ -3,29 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/15 20:08:49 by aignacz           #+#    #+#             */
-/*   Updated: 2021/05/17 22:19:39 by aignacz          ###   ########.fr       */
+/*   Created: 2021/05/12 18:15:53 by mwen              #+#    #+#             */
+/*   Updated: 2021/05/22 12:51:35 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	len1;
-	size_t	len2;
-	char	*new_s;
+	char	*p;
+	int		len;
 
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	new_s = malloc((len1 + len2 + 1) * sizeof(char));
-	if (new_s != 0)
-	{
-		ft_strlcpy(new_s, s1, len1 + 1);
-		ft_strlcpy(new_s + len1, s2, len2 + 1);
-	}
-	return (new_s);
+	if (!s1 || !s2)
+		return (NULL);
+	len = ft_strlen(s1) + ft_strlen(s2) + 1;
+	p = (char *)ft_calloc(len, 1);
+	if (!p)
+		return (NULL);
+	ft_memcpy(p, s1, ft_strlen(s1));
+	ft_memcpy(p + ft_strlen(s1), s2, ft_strlen(s2));
+	return (p);
 }

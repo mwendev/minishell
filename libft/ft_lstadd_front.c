@@ -3,18 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/16 23:06:36 by aignacz           #+#    #+#             */
-/*   Updated: 2021/05/17 21:50:21 by aignacz          ###   ########.fr       */
+/*   Created: 2021/05/20 23:19:09 by mwen              #+#    #+#             */
+/*   Updated: 2021/05/21 12:12:41 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_front(t_list **lst, t_list *new)
+void	ft_lstadd_front(t_list **lst, t_list *neew)
 {
-	if (*lst != 0)
-		new->next = *lst;
-	*lst = new;
+	if (lst)
+	{
+		if (*lst)
+			neew->next = *lst;
+		*lst = neew;
+	}
 }

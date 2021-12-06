@@ -26,6 +26,7 @@ relibft:
 			cd ${LIBF} && ${MAKE} re
 
 clean:
+			cd ${LIBF} && ${MAKE} clean
 			${RM} ${OBJS}
 
 fclean:		clean

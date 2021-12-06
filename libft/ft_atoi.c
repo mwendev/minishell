@@ -3,49 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/15 17:37:04 by aignacz           #+#    #+#             */
-/*   Updated: 2021/05/17 22:26:37 by aignacz          ###   ########.fr       */
+/*   Created: 2021/05/14 23:40:08 by mwen              #+#    #+#             */
+/*   Updated: 2021/12/06 22:37:33 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_isspace(int c)
+int	ft_atoi(const char *s)
 {
-	int	out;
-
-	if (c == ' ' || c == '\f' || c == '\n' || c == '\r' || c == '\t' || c == '\v')
-		out = 1;
-	else
-		out = 0;
-	return (out);
-}
-
-int	ft_atoi(const char *nptr)
-{
-	int	i;
-	int	result;
-	int	neg;
+	size_t	i;
+	size_t	nb;
+	int		neg;
 
 	i = 0;
-	while (ft_isspace(*(nptr + i)) != 0)
+	nb = 0;
+	neg = 1;
+	while ((s[i] == '\n' || s[i] == '\t' || s[i] == ' ')
+		|| s[i] == '\v' || s[i] == '\f' || s[i] == '\r')
 		i++;
-	result = 0;
-	if (*(nptr + i) == '-')
-		neg = 1;
-	else
-		neg = 0;
-	if (*(nptr + i) == '-' || *(nptr + i) == '+')
+	if (s[i] == '-')
+		neg = -1;
+	if (s[i] == '-' || s[i] == '+')
 		i++;
-	while (*(nptr + i) >= '0' && *(nptr + i) <= '9')
+	while (s[i] >= '0' && s[i] <= '9')
 	{
-		if (neg)
-			result = (result * 10) - (*(nptr + i) - '0');
-		else
-			result = (result * 10) + (*(nptr + i) - '0');
+		nb = nb * 10 + (s[i] - '0');
 		i++;
 	}
-	return (result);
+	return (nb * neg);
 }

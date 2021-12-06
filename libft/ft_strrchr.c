@@ -3,25 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/12 14:54:54 by aignacz           #+#    #+#             */
-/*   Updated: 2021/05/17 22:23:07 by aignacz          ###   ########.fr       */
+/*   Created: 2021/05/15 12:05:26 by mwen              #+#    #+#             */
+/*   Updated: 2021/05/19 14:54:02 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+
 char	*ft_strrchr(const char *s, int c)
 {
-	char	*p;
-	char	ch;
+	char	*tmp;
+	size_t	i;
 
-	p = (char *) s;
-	ch = (char) c;
-	while (*p)
-		p++;
-	while ((p != s) && *p != ch)
-		p--;
-	if (*p != ch)
-		p = 0;
-	return (p);
+	tmp = NULL;
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == c)
+			tmp = (char *)s + i;
+		i++;
+	}
+	if (s[i] == c)
+		tmp = (char *)s + i;
+	return (tmp);
 }

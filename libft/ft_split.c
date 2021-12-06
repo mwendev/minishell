@@ -3,77 +3,74 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/17 19:56:34 by mamuller          #+#    #+#             */
-/*   Updated: 2021/06/09 23:47:15 by aignacz          ###   ########.fr       */
+/*   Created: 2021/05/20 22:31:44 by mwen              #+#    #+#             */
+/*   Updated: 2021/12/06 22:45:07 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-DESCRIPTION
-	Allocates (with malloc(3)) and returns an array of strings obtained by
-	splitting ’s’ using the character ’c’ as a delimiter. The array must be
-	ended by a NULL pointer.
-RETURN VALUE
-	The array of new strings resulting from the split. NULL if the allocation
-	fails.
-*/
-
 #include "libft.h"
-#include <stdlib.h>
 
-static int	ft_wcount(char const *str, char c)
+static int	get_output_len(const char *s, char c)
 {
-	int		word;
-	char	*tmp;
-	char	*tmp_free;
+	int	i;
+	int	is_string;
 
-	if (c == '\0')
-		return (1);
-	else if (ft_strlen(str) == 0)
-		return (0);
-	word = 0;
-	tmp = ft_strdup((char *)str);
-	if (!tmp)
-		return (0);
-	tmp_free = tmp;
-	while (tmp != NULL)
+	i = 0;
+	is_string = 0;
+	while (*s)
 	{
-		if (*(tmp + 1) != c || *tmp != c)
-			word = word + 1;
-		tmp = ft_strchr(tmp + 1, c);
+		if (*s != c && is_string == 0)
+		{
+			is_string = 1;
+			i++;
+		}
+		else if (*s == c)
+			is_string = 0;
+		s++;
 	}
-	if (str[ft_strlen(str) - 1] == c)
-		word--;
-	free(tmp_free);
-	return (word);
+	return (i);
 }
 
-char	**ft_split(char const *str, char c)
+static char	*make_string(const char *s, int start, int finish)
 {
-	char	**temp;
-	int		word;
-	int		start;
-	int		len;
+	char	*string;
+	int		i;
 
-	if (!str)
+	i = 0;
+	string = (char *)malloc((finish - start + 1) * sizeof(char));
+	if (!string)
 		return (NULL);
-	temp = ft_calloc(sizeof(char *) * (ft_wcount(str, c) + 1), 1);
-	word = 0;
-	start = 0;
-	len = 0;
-	while (str[start + len] != '\0' && temp != NULL)
+	while (start < finish)
+		string[i++] = s[start++];
+	string[i] = '\0';
+	return (string);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	size_t	i;
+	size_t	j;
+	int		start;
+	char	**output;
+
+	output = (char **)ft_calloc(get_output_len(s, c) + 1, sizeof(char *));
+	if (!s || !output)
+		return (NULL);
+	i = 0;
+	j = 0;
+	start = -1;
+	while (i <= ft_strlen(s))
 	{
-		start = start + len;
-		len = 0;
-		while (str[start] == c && str[start] != '\0')
-			start++;
-		while (str[start + len] != c && str[start + len] != '\0')
-			len++;
-		if (str[start + len - 1] != c)
-			temp[word] = ft_substr(str, start, len);
-		word++;
+		if (s[i] != c && start < 0)
+			start = i;
+		else if ((s[i] == c || i == ft_strlen(s)) && start >= 0)
+		{
+			output[j++] = make_string(s, start, i);
+			start = -1;
+		}
+		i++;
 	}
-	return (temp);
+	return (output);
 }

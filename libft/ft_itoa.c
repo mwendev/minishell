@@ -3,55 +3,80 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/15 23:07:07 by aignacz           #+#    #+#             */
-/*   Updated: 2021/05/17 22:27:25 by aignacz          ###   ########.fr       */
+/*   Created: 2021/05/15 11:44:26 by mwen              #+#    #+#             */
+/*   Updated: 2021/06/17 19:32:35 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdlib.h>
 
-static int	ft_get_len(int n)
+static	char	*min_int(void)
 {
-	int	len;
+	char	*output;
 
-	len = 0;
-	if (n < 0)
-		len++;
-	while (n / 10 != 0)
-	{
-		len++;
-		n = n / 10;
-	}
-	return (len);
+	output = (char *)malloc(20 * sizeof(char));
+	if (!output)
+		return (NULL);
+	else
+		ft_memcpy(output, "-9223372036854775807", 20);
+	return (output);
 }
 
-char	*ft_itoa(int n)
+static int	get_len(long long n)
+{
+	size_t	i;
+
+	if (n == 0)
+		return (1);
+	i = 0;
+	while (n > 0)
+	{
+		n = n / 10;
+		i++;
+	}
+	return (i);
+}
+
+static void	convert(int len, int neg, long long n, char *output)
+{
+	char	nb;
+
+	output[len] = '\0';
+	len--;
+	while (len > neg)
+	{
+		nb = (n % 10) + '0';
+		output[len] = nb;
+		n = n / 10;
+		len--;
+	}
+	output[len] = n + '0';
+	if (neg)
+		output[0] = '-';
+}
+
+char	*ft_itoa(long long n)
 {
 	int		len;
-	int		pre;
-	char	*str;
+	int		neg;
+	char	*output;
 
-	len = ft_get_len(n);
-	str = malloc((len + 2) * sizeof(char));
-	if (str != 0)
+	len = 0;
+	neg = 0;
+	if (n == -9223372036854775807)
+		return (min_int());
+	if (n < 0)
 	{
-		*(str + len + 1) = '\0';
-		pre = 1;
-		if (n < 0)
-		{
-			*str = '-';
-			pre = -1;
-		}
-		*(str + len) = pre * (n % 10) + '0';
-		while (n / 10 != 0)
-		{
-			n = n / 10;
-			len--;
-			*(str + len) = pre * (n % 10) + '0';
-		}
+		len++;
+		n *= -1;
+		neg = 1;
 	}
-	return (str);
+	len += get_len(n);
+	output = (char *)malloc((len + 1) * sizeof(char));
+	if (!output)
+		return (NULL);
+	convert(len, neg, n, output);
+	return (output);
 }

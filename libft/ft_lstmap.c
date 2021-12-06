@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/17 00:22:58 by aignacz           #+#    #+#             */
-/*   Updated: 2021/05/28 22:41:37 by aignacz          ###   ########.fr       */
+/*   Created: 2021/05/21 22:17:54 by mwen              #+#    #+#             */
+/*   Updated: 2021/05/22 00:02:28 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,29 @@
 
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_list	*new_lst;
-	t_list	*temp;
-	int		stop;
+	t_list	*head;
+	t_list	*node;
 
-	stop = 0;
-	if (lst == 0)
-		return (0);
-	new_lst = ft_lstnew((*f)(lst->content));
-	while (lst->next != 0 && !stop)
+	if (!lst)
+		return (NULL);
+	node = ft_lstnew(f(lst->content));
+	if (!node)
+		return (NULL);
+	head = node;
+	while (lst)
 	{
+		if (lst->next)
+		{
+			node->next = ft_lstnew(f(lst->next->content));
+			if (!(node->next))
+			{
+				ft_lstclear(&node, del);
+				return (NULL);
+			}
+			node = node->next;
+		}
 		lst = lst->next;
-		temp = ft_lstnew((*f)(lst->content));
-		if (temp != 0)
-			ft_lstadd_back(&new_lst, temp);
-		else
-			stop = 1;
 	}
-	if (stop)
-		ft_lstclear(&new_lst, del);
-	return (new_lst);
+	node->next = NULL;
+	return (head);
 }

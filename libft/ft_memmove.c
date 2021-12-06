@@ -3,40 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/13 16:34:50 by aignacz           #+#    #+#             */
-/*   Updated: 2021/05/17 22:10:45 by aignacz          ###   ########.fr       */
+/*   Created: 2021/05/14 18:17:04 by mwen              #+#    #+#             */
+/*   Updated: 2021/06/15 18:57:31 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	*ft_memmove(void *s1, const void *s2, size_t n)
 {
-	int		i;
-	int		ni;
-	char	*dst_p;
+	size_t	i;
 
-	dst_p = (char *) dest;
-	ni = n;
-	if (((char *) src) < dst_p && ((char *) src) + ni > dst_p)
+	if (!s1 && !s2)
+		return (0);
+	i = 0;
+	if ((size_t)s1 - (size_t)s2 < n)
 	{
-		i = ni - 1;
-		while (i >= 0)
+		i = n - 1;
+		while (i < n)
 		{
-			*(dst_p + i) = *((char *) src + i);
+			((unsigned char *)s1)[i] = ((unsigned char *)s2)[i];
 			i--;
 		}
 	}
 	else
 	{
-		i = 0;
-		while (i < ni)
+		while (i < n)
 		{
-			*(dst_p + i) = *((char *) src + i);
+			((unsigned char *)s1)[i] = ((unsigned char *)s2)[i];
 			i++;
 		}
 	}
-	return (dst_p);
+	return (s1);
 }

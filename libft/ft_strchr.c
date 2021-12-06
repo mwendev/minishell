@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/12 14:54:54 by aignacz           #+#    #+#             */
-/*   Updated: 2021/05/17 22:19:02 by aignacz          ###   ########.fr       */
+/*   Created: 2021/05/15 11:50:51 by mwen              #+#    #+#             */
+/*   Updated: 2021/06/12 15:59:47 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+
 char	*ft_strchr(const char *s, int c)
 {
-	char	*p;
-	char	ch;
-
-	p = (char *) s;
-	ch = (char) c;
-	while (*p && *p != ch)
-		p++;
-	if (*p != ch)
-		p = 0;
-	return (p);
+	while (*s)
+	{
+		if (*(char *)s == c)
+			return ((char *)s);
+		s++;
+	}
+	if (*(char *)s == c)
+		return ((char *)s);
+	return (NULL);
 }
