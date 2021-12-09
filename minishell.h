@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/06 23:13:23 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/09 21:12:22 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@
 typedef struct s_data
 {
 	int		end;
-	int		argc;
-	char	**argv;
 	char	*cmd_with_path;
 	char	**envp;
+	char	*line;
+	char	**cmd;
 
 }	t_data;
 

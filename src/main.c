@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/06 23:19:57 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/09 21:12:39 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,29 @@ void	initialize(t_data *data)
 	printf("--------------- Minishell 0.0 ---------------\n");
 	printf("---------------------------------------------\n\n");
 	data->end = 0;
-	data->argv = NULL;
-	data->argc = 0;
+	data->line = NULL;
+	data->cmd = NULL;
 }
 
 void	destroy(t_data *data)
 {
-	while ((data->argc)-- > 0)
-		free(*(data->argv + data->argc));
-	if (data->argv)
-		free(data->argv);
+	int	i;
+
+	if (*(data->cmd))
+	{
+		i = 0;
+		while (*(data->cmd + i))
+			i++;
+		while (i-- > 0)
+			free(*(data->cmd + i));
+		free(data->cmd);
+	}
 }
 
 void	execute_command(char *line, t_data *data)
 {
-	pid_t pid;
-	char **argv;
+	pid_t	pid;
+	char	**argv;
 
 	if (ft_strchr(line, ' '))
 		argv = ft_split(line, ' ');
@@ -48,7 +55,7 @@ void	execute_command(char *line, t_data *data)
 	else if (!pid)
 	{
 		if (execve(data->cmd_with_path, argv, data->envp) < 0)
-		perror("exec failed");
+			perror("exec failed");
 		data->end = 1;
 	}
 	else
@@ -112,12 +119,28 @@ int	check_command(char *line, t_data *data)
 	return (1);
 }
 
+void	create_commands(t_data *data)
+{
+	int		i;
+	char	*temp;
+
+	data->cmd = ft_split(data->line, '|');
+	i = 0;
+	while (*(data->cmd + i))
+	{
+		temp = ft_strtrim(*(data->cmd + i), " ");
+		free(*(data->cmd + i));
+		*(data->cmd + i) = temp;
+		i++;
+	}
+}
+
 int	main(void)
 {
-	char	*line;
-	char	*promt;
-	char	path[PATH_MAX];
-	t_data	data;
+	char		*promt;
+	char		path[PATH_MAX];
+	t_data		data;
+	int			i;
 	extern char	**environ;
 
 	initialize(&data);
@@ -125,11 +148,17 @@ int	main(void)
 	{
 		getcwd(path, PATH_MAX);
 		promt = ft_strjoin(path, ":> ");
-		line = readline(promt);
+		data.line = readline(promt);
 		free(promt);
 		data.envp = environ;
-		if (!check_command(line, &data))
-			execute_command(line, &data);
+		create_commands(&data);
+		i = 0;
+		while (*(data.cmd + i))
+		{
+			if (!check_command(*(data.cmd + i), &data))
+				execute_command(*(data.cmd + i), &data);
+			i++;
+		}
 	}
 	destroy(&data);
 	return (0);
