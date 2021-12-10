@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/09 21:12:39 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/10 17:09:02 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,8 @@ int	main(void)
 				execute_command(*(data.cmd + i), &data);
 			i++;
 		}
+		if (data.cmd)
+			free(data.cmd);
 	}
 	destroy(&data);
 	return (0);
