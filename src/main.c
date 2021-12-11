@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/11 15:59:20 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/11 16:38:08 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	split_commands(t_data *data)//path
 	int		i;
 	char	*temp;
 
-	data->cmd = ft_split(data->line, '|');
+	data->cmd = ft_split(data->line, ';');
 	i = 0;
 	while (*(data->cmd + i))
 	{
