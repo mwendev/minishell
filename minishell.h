@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/11 20:34:02 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/11 22:25:07 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 typedef struct s_data
 {
 	int		end;
+	int		not_valid;
+	int		pipe_nb;
 	char	*cmd_with_path;
 	char	**envp;
 	char	*line;
@@ -35,6 +37,9 @@ typedef struct s_data
 }	t_data;
 
 void	change_directory(t_data *data);
+int	check_command(char *cmd, t_data *data);
 char	**split_with_comma(char *line);
+void	execute_command(char *cmd, t_data *data);
+void	error(t_data *data, char *str, int end);
 
 #endif

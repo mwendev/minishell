@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+         #
+#    By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/11 13:50:28 by mwen              #+#    #+#              #
-#    Updated: 2021/12/11 17:36:30 by aignacz          ###   ########.fr        #
+#    Updated: 2021/12/11 22:24:44 by mwen             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CFLAGS			=	-Wall -Wextra -Werror -g
 RM				=	rm -rf
 INCLUDE			=	libft/libft.h minishell.h
 
-SRCS_LIST		=	main.c builtin.c
+SRCS_LIST		=	main.c builtin.c error.c check.c execute.c
 SRCS_DIR		=	src/
 SRCS			=	${addprefix ${SRCS_DIR}, ${SRCS}}
 
