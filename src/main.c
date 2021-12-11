@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/11 16:38:08 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/11 20:31:57 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	initialize(t_data *data, char **environ)
 	data->line = NULL;
 	data->cmd = NULL;
 	data->envp = environ;
+	getcwd(data->path, PATH_MAX);
+	data->prev_dir = ft_strdup(data->path);
 }
 
 void	destroy(t_data *data)
@@ -38,10 +40,13 @@ void	destroy(t_data *data)
 	}
 }
 
-void	execute_command(char *line, t_data *data)
+void	execute_command(t_data *data)
 {
 	pid_t	pid;
 
+	if (ft_strlen(data->argv[0]) == 2
+		&& ft_strncmp(data->argv[0], "cd", 2) == 0)
+		return (change_directory(data));
 	pid = fork();
 	if (pid < 0)
 		perror("fork failed");
@@ -73,44 +78,52 @@ char	*check_path_in_env(char **envp)
 	return (NULL);
 }
 
-char	*create_command(char *line, char *split, t_data *data)
+int	create_command(char *line, t_data *data)
 {
-	char	*full_path;
-	char	*add_slash;
-
-	if (ft_strchr(line, ' '))
+	if (ft_strchr(line, '"') == NULL && ft_strchr(line, '\'') == NULL
+		&& ft_strchr(line, ' '))
 		data->argv = ft_split(line, ' ');
+	else if (ft_strchr(line, ' '))
+		data->argv = ft_split(line, ' '); //data->argv = split_with_comma(line);
 	else
 	{
-		data->argv = ft_calloc (2, sizeof(char *));
+		data->argv = ft_calloc(2, sizeof(char *));
 		data->argv[0] = ft_strdup(line);
 	}
-	if (ft_strchr(data->argv[0], '/'))
-		full_path = ft_strdup(data->argv[0]);
-	else
+	if (ft_strncmp(data->argv[0], "cd", ft_strlen(data->argv[0])) == 0
+		&& (ft_strncmp(data->argv[0], "cd", 2) == 0))
 	{
-		add_slash = ft_strjoin(split, "/");
-		full_path = ft_strjoin(add_slash, data->argv[0]);
-		free(add_slash);
+		data->cmd_with_path = ft_strdup(data->argv[0]);
+		return (1);
 	}
-	return (full_path);
+	return (0);
 }
 
-int	check_command(char *line, t_data *data)
+int	check_command(char *cmd, t_data *data)
 {
 	char	*env_paths;
 	char	**split;
 	char	*full_path;
+	char	*add_slash;
 	int		i;
 
 	i = -1;
 	env_paths = check_path_in_env(data->envp);
 	if (!env_paths)
 		return (2);
+	if (create_command(cmd, data))
+		return (0);
 	split = ft_split(env_paths, ':');
 	while (split[++i])
 	{
-		full_path = create_command(line, split[i], data);
+		if (ft_strchr(data->argv[0], '/'))
+			full_path = ft_strdup(data->argv[0]);
+		else
+		{
+			add_slash = ft_strjoin(split[i], "/");
+			full_path = ft_strjoin(add_slash, data->argv[0]);
+			free(add_slash);
+		}
 		if (!access(full_path, X_OK))
 		{
 			data->cmd_with_path = full_path;
@@ -118,8 +131,8 @@ int	check_command(char *line, t_data *data)
 		}
 		free(full_path);
 	}
-	printf("%s: command not found\n", line);
-	free(line);
+	printf("%s: command not found\n", cmd);
+	free(cmd);
 	return (1);
 }
 
@@ -142,7 +155,6 @@ void	split_commands(t_data *data)//path
 int	main(void)
 {
 	char		*promt;
-	char		path[PATH_MAX];
 	t_data		data;
 	int			i;
 	extern char	**environ;
@@ -150,8 +162,8 @@ int	main(void)
 	initialize(&data, environ);
 	while (!data.end)
 	{
-		getcwd(path, PATH_MAX);
-		promt = ft_strjoin(path, ":> ");
+		getcwd(data.path, PATH_MAX);
+		promt = ft_strjoin(data.path, ":> ");
 		data.line = readline(promt);
 		if (data.line && *(data.line))
 			add_history(data.line);
@@ -161,7 +173,7 @@ int	main(void)
 		while (*(data.cmd + i))
 		{
 			if (!check_command(*(data.cmd + i), &data))
-				execute_command(*(data.cmd + i), &data);
+				execute_command(&data);
 			i++;
 		}
 		if (data.cmd)

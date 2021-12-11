@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/11 15:45:55 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/11 20:34:02 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,11 @@ typedef struct s_data
 	char	*line;
 	char	**cmd;
 	char	**argv;
-
+	char	*prev_dir;
+	char	path[PATH_MAX];
 }	t_data;
+
+void	change_directory(t_data *data);
+char	**split_with_comma(char *line);
 
 #endif
