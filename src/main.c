@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/12/11 15:20:55 by mwen             ###   ########.fr       */
+=======
+/*   Updated: 2021/12/11 15:25:25 by aignacz          ###   ########.fr       */
+>>>>>>> 44228e9213ee02b2e33aacee7776bc16bc2d8e5d
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +59,6 @@ void	execute_command(char *line, t_data *data)
 		perror("fork failed");
 	else if (!pid)
 	{
-		printf("%s %s\n", data->cmd_with_path, argv[0]);
 		if (execve(data->cmd_with_path, argv, data->envp) < 0)
 			perror("exec failed");
 		data->end = 1;
@@ -90,14 +93,6 @@ int	check_command(char *line, t_data *data)
 	char	*full_path;
 	int		i;
 
-	//if you wanna check multiple commands here is what you coded
-	/*
-		data->argv = ft_split(line, ' ');
-	data->argc = 0;
-	while (*(data->argv + data->argc))
-		data->argc++;
-	printf("Number of arguments: %i\n", data->argc);
-	*/
 	i = -1;
 	env_paths = check_path_in_env(data->envp);
 	if (!env_paths)
@@ -105,9 +100,14 @@ int	check_command(char *line, t_data *data)
 	split = ft_split(env_paths, ':');
 	while (split[++i])
 	{
-		add_slash = ft_strjoin(split[i], "/");
-		full_path = ft_strjoin(add_slash, line);
-		free(add_slash);
+		if (ft_strchr(line, '/'))
+			full_path = ft_strdup(line);
+		else
+		{
+			add_slash = ft_strjoin(split[i], "/");
+			full_path = ft_strjoin(add_slash, line);
+			free(add_slash);
+		}
 		if (!access(full_path, X_OK))
 		{
 			free(line);
@@ -125,7 +125,6 @@ void	create_commands(t_data *data)//path
 {
 	int		i;
 	char	*temp;
-
 
 	data->cmd = ft_split(data->line, '|');
 	i = 0;
@@ -152,8 +151,6 @@ int	main(void)
 		getcwd(path, PATH_MAX);
 		promt = ft_strjoin(path, ":> ");
 		data.line = readline(promt);
-		if (data.line && *(data.line))
-			add_history(data.line);
 		free(promt);
 		create_commands(&data);
 		i = 0;
