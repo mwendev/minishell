@@ -151,6 +151,8 @@ int	main(void)
 		getcwd(path, PATH_MAX);
 		promt = ft_strjoin(path, ":> ");
 		data.line = readline(promt);
+		if (data.line && *(data.line))
+			add_history(data.line);
 		free(promt);
 		create_commands(&data);
 		i = 0;
