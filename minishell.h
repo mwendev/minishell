@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/09 21:12:22 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/11 15:45:55 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_data
 	char	**envp;
 	char	*line;
 	char	**cmd;
+	char	**argv;
 
 }	t_data;
 

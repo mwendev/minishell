@@ -6,11 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/12/11 15:20:55 by mwen             ###   ########.fr       */
-=======
-/*   Updated: 2021/12/11 15:25:25 by aignacz          ###   ########.fr       */
->>>>>>> 44228e9213ee02b2e33aacee7776bc16bc2d8e5d
+/*   Updated: 2021/12/11 15:59:20 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +41,13 @@ void	destroy(t_data *data)
 void	execute_command(char *line, t_data *data)
 {
 	pid_t	pid;
-	char	**argv;
 
-	if (ft_strchr(line, ' '))
-		argv = ft_split(line, ' ');
-	else
-	{
-		argv = ft_calloc (2, sizeof(char *));
-		argv[0] = ft_strdup(line);
-	}
 	pid = fork();
 	if (pid < 0)
 		perror("fork failed");
 	else if (!pid)
 	{
-		if (execve(data->cmd_with_path, argv, data->envp) < 0)
+		if (execve(data->cmd_with_path, data->argv, data->envp) < 0)
 			perror("exec failed");
 		data->end = 1;
 	}
@@ -85,11 +73,33 @@ char	*check_path_in_env(char **envp)
 	return (NULL);
 }
 
+char	*create_command(char *line, char *split, t_data *data)
+{
+	char	*full_path;
+	char	*add_slash;
+
+	if (ft_strchr(line, ' '))
+		data->argv = ft_split(line, ' ');
+	else
+	{
+		data->argv = ft_calloc (2, sizeof(char *));
+		data->argv[0] = ft_strdup(line);
+	}
+	if (ft_strchr(data->argv[0], '/'))
+		full_path = ft_strdup(data->argv[0]);
+	else
+	{
+		add_slash = ft_strjoin(split, "/");
+		full_path = ft_strjoin(add_slash, data->argv[0]);
+		free(add_slash);
+	}
+	return (full_path);
+}
+
 int	check_command(char *line, t_data *data)
 {
 	char	*env_paths;
 	char	**split;
-	char	*add_slash;
 	char	*full_path;
 	int		i;
 
@@ -100,17 +110,9 @@ int	check_command(char *line, t_data *data)
 	split = ft_split(env_paths, ':');
 	while (split[++i])
 	{
-		if (ft_strchr(line, '/'))
-			full_path = ft_strdup(line);
-		else
-		{
-			add_slash = ft_strjoin(split[i], "/");
-			full_path = ft_strjoin(add_slash, line);
-			free(add_slash);
-		}
+		full_path = create_command(line, split[i], data);
 		if (!access(full_path, X_OK))
 		{
-			free(line);
 			data->cmd_with_path = full_path;
 			return (0);
 		}
@@ -121,7 +123,7 @@ int	check_command(char *line, t_data *data)
 	return (1);
 }
 
-void	create_commands(t_data *data)//path
+void	split_commands(t_data *data)//path
 {
 	int		i;
 	char	*temp;
@@ -154,7 +156,7 @@ int	main(void)
 		if (data.line && *(data.line))
 			add_history(data.line);
 		free(promt);
-		create_commands(&data);
+		split_commands(&data);
 		i = 0;
 		while (*(data.cmd + i))
 		{
