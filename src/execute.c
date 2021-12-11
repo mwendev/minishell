@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/11 22:34:38 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/11 22:38:33 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,6 @@ void	execute_command(char *cmd, t_data *data)
 	char	**pipe_cmd;
 	int		i;
 
-	if (ft_strlen(data->argv[0]) == 2
-		&& ft_strncmp(data->argv[0], "cd", 2) == 0)
-		return (change_directory(data));
 	i = -1;
 	pipe_cmd = NULL;
 	if (ft_strchr(cmd, '|'))
@@ -77,6 +74,9 @@ void	execute_command(char *cmd, t_data *data)
 		check_command(cmd, data);
 	if (data->not_valid)
 		return ;
+	else if (ft_strlen(data->argv[0]) == 2
+		&& ft_strncmp(data->argv[0], "cd", 2) == 0)
+		return (change_directory(data));
 	else
 	{
 		if (!pipe_cmd)
