@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/10 17:09:02 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/11 13:40:50 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	initialize(t_data *data)
+void	initialize(t_data *data, char **environ)
 {
 	printf("\n---------------------------------------------\n");
 	printf("--------------- Minishell 0.0 ---------------\n");
@@ -20,6 +20,7 @@ void	initialize(t_data *data)
 	data->end = 0;
 	data->line = NULL;
 	data->cmd = NULL;
+	data->envp = environ;
 }
 
 void	destroy(t_data *data)
@@ -54,6 +55,7 @@ void	execute_command(char *line, t_data *data)
 		perror("fork failed");
 	else if (!pid)
 	{
+		printf("%s %s\n", data->cmd_with_path, argv[0]);
 		if (execve(data->cmd_with_path, argv, data->envp) < 0)
 			perror("exec failed");
 		data->end = 1;
@@ -119,10 +121,11 @@ int	check_command(char *line, t_data *data)
 	return (1);
 }
 
-void	create_commands(t_data *data)
+void	create_commands(t_data *data)//path
 {
 	int		i;
 	char	*temp;
+
 
 	data->cmd = ft_split(data->line, '|');
 	i = 0;
@@ -143,14 +146,13 @@ int	main(void)
 	int			i;
 	extern char	**environ;
 
-	initialize(&data);
+	initialize(&data, environ);
 	while (!data.end)
 	{
 		getcwd(path, PATH_MAX);
 		promt = ft_strjoin(path, ":> ");
 		data.line = readline(promt);
 		free(promt);
-		data.envp = environ;
 		create_commands(&data);
 		i = 0;
 		while (*(data.cmd + i))

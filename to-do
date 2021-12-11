@@ -1,0 +1,8 @@
+Need to add:
+	support flag: ls -la
+	support path: /bin/ls/
+	support history
+
+Need to fix:
+fix ctrl+D segmentation fault
+

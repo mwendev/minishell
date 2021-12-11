@@ -1,39 +1,59 @@
-SRCS_DIR		= src/
-SRCS			= main.c
-SRCS_WITHPATH	= ${addprefix ${SRCS_DIR}, ${SRCS}}
-OBJS			= ${SRCS_WITHPATH:.c=.o}
-LIBF			= libft
-LIB				= ${LIBF}/libft.a
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/12/11 13:50:28 by mwen              #+#    #+#              #
+#    Updated: 2021/12/11 14:04:10 by mwen             ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-INCLUDE = libft/libft.h libft/libftprintf.h minishell.h
-NAME	= minishell
-CC		= clang
-CFLAGS	= -Wall -Wextra -Werror -g
-RM		= rm -f
+NAME			=	minishell
+CC				=	clang
+CFLAGS			=	-Wall -Wextra -Werror -g
+RM				=	rm -rf
+INCLUDE			=	libft/libft.h minishell.h
 
-all:		${NAME}
+SRCS_LIST		=	main.c
+SRCS_DIR		=	src/
+SRCS			=	${addprefix ${SRCS_DIR}, ${SRCS}}
 
-%.o: %.c ${INCLUDE}
-			${CC} -c ${CFLAGS} -iquote ${LIBF} -o $@ $<
+OBJS_LIST		=	$(patsubst %.c, %.o, $(SRCS_LIST))
+OBJS_DIR		=	obj/
+OBJS			=	$(addprefix $(OBJS_DIR), $(OBJS_LIST)) $(GNL:.c=.o)
 
-${NAME}:	${OBJS} ${LIB} ${INCLUDES}
-			${CC} ${OBJS} ${LIB} -lreadline -iquote ${LIBF} -o ${NAME}
+LIBFT			=	$(LIBFT_DIR)libft.a
+LIBFT_DIR		=	libft/
 
-${LIB}:
-			cd ${LIBF} && ${MAKE}
+GREEN			=	\033[0;32m
+RED				=	\033[0;31m
+RESET			=	\033[0m
 
-relibft:
-			cd ${LIBF} && ${MAKE} re
+all:			$(NAME)
+
+$(NAME):		$(LIBFT) $(OBJS_DIR) $(OBJS)
+				@$(CC) $(FLAGS) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
+
+$(OBJS_DIR):
+				@mkdir -p $(OBJS_DIR)
+
+$(OBJS_DIR)%.o:	$(SRCS_DIR)%.c 
+				@$(CC) $(FLAGS) -c -I$(SRCS_DIR) $< -o $@
+
+$(LIBFT):
+				@echo "$(GREEN)Compiling $(LIBFT)...$(RESET)"
+				@$(MAKE) -sC $(LIBFT_DIR)
 
 clean:
-			cd ${LIBF} && ${MAKE} clean
-			${RM} ${OBJS}
+			@$(MAKE) -sC $(LIBFT_DIR) clean
+			@$(RM) $(OBJS_DIR)
+			@echo "$(RED)cleaned$(RESET)"
 
 fclean:		clean
-			${RM} ${NAME}
-
-libftclean:
-			cd ${LIBF} && ${MAKE} fclean
+			@$(MAKE) -sC $(LIBFT_DIR) fclean
+			@$(RM) $(NAME)
 
 re:			fclean all
 
