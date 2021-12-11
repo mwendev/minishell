@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/11 13:40:50 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/11 15:20:55 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,8 @@ int	main(void)
 		getcwd(path, PATH_MAX);
 		promt = ft_strjoin(path, ":> ");
 		data.line = readline(promt);
+		if (data.line && *(data.line))
+			add_history(data.line);
 		free(promt);
 		create_commands(&data);
 		i = 0;
