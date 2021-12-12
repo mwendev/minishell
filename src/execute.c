@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/12 13:57:14 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/12 14:12:23 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void	execute_fork(char *cmd, t_data *data, int cmd_nb)
 	{
 		if (cmd_nb >= 0)
 			execute_fd(cmd_nb, data);
-		// if (execve(data->cmd_with_path, data->argv, data->envp) < 0)
-			// return (error(data, "exec failed", 0));
+		if (execve(data->cmd_with_path, data->argv, data->envp) < 0)
+			return (error(data, "exec failed", 0));
 	}
 	waitpid(-1, NULL, 0);
 }
@@ -93,7 +93,7 @@ void	execute_command(char *cmd, t_data *data)
 	else if (ft_strlen(data->argv[0]) == 2
 		&& ft_strncmp(data->argv[0], "cd", 2) == 0)
 		return (change_directory(data));
-	else if (data->pipe_nb)
+	else if (!data->pipe_nb)
 		execute_fork(cmd, data, -1);
 	else
 		execute_pipe(pipe_cmd, data);
