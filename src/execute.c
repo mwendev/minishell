@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/12 18:31:52 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/12 18:38:31 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,33 @@ void	execute_fork(char *cmd, t_data *data, int cmd_nb, int end)
 void	execute_pipe(char *cmd, t_data *data)
 {
 	char	**pipe_cmd;
+	int		piped;
 	int		i;
 
 	data->pipe_fd = ft_calloc(data->pipe_nb * 2, sizeof(int));
 	pipe_cmd = ft_split(cmd, '|');
 	i = -1;
+	piped = 0;
 	while (pipe_cmd[++i] && !check_command(pipe_cmd[i], data))
 	{
 		if (pipe_cmd[i + 1])
 		{
 			if (pipe(data->pipe_fd + i * 2) == -1)
+			{
+				close_pipe(piped, data);
 				return (error(data, "pipe failed", 0));
+			}
 			else
+			{
+				++piped;
 				execute_fork(pipe_cmd[i], data, i, 0);
+			}
 		}
 		else
 			execute_fork(pipe_cmd[i], data, i, 1);
 	}
 	free_split(pipe_cmd);
-	i = (i - 1) * 2;
-	while (i--)
-		close(data->pipe_fd[i]);
+	close_pipe(piped, data);
 }
 
 void	execute_command(char *cmd, t_data *data)
