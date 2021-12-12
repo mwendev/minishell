@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/12 18:06:17 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/12 18:23:18 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 
 void	execute_fd(int cmd_nb, t_data *data, int end)
 {
-	if (cmd_nb > 0 && dup2(data->pipe_fd[(cmd_nb - 1) * 2], STDIN_FILENO) < 0)
-		return (error(data, "dup failed", 0));
-	close(data->pipe_fd[(cmd_nb - 1) * 2 + 1]);
+	if (cmd_nb > 0)
+	{
+		if (dup2(data->pipe_fd[(cmd_nb - 1) * 2], STDIN_FILENO) < 0)
+			return (error(data, "dup failed", 0));
+		close(data->pipe_fd[(cmd_nb - 1) * 2 + 1]);
+	}
 	if (!end)
 	{
 		if (dup2(data->pipe_fd[cmd_nb * 2 + 1], STDOUT_FILENO) < 0)
@@ -38,6 +41,10 @@ void	execute_fork(char *cmd, t_data *data, int cmd_nb, int end)
 		if (execve(data->cmd_with_path, data->argv, data->envp) < 0)
 			return (error(data, "exec failed", 0));
 	}
+	// cmd_nb = (cmd_nb - 1) * 2;
+	// while (cmd_nb--)
+		// close(data->pipe_fd[cmd_nb]);
+	waitpid(-1, NULL, 0);
 }
 
 void	execute_pipe(char *cmd, t_data *data)
@@ -61,10 +68,6 @@ void	execute_pipe(char *cmd, t_data *data)
 			execute_fork(pipe_cmd[i], data, i, 1);
 	}
 	free_split(pipe_cmd);
-	i = (i - 1) * 2;
-	while (i--)
-		close(data->pipe_fd[i]);
-	waitpid(-1, NULL, 0);
 }
 
 void	execute_command(char *cmd, t_data *data)
@@ -74,9 +77,11 @@ void	execute_command(char *cmd, t_data *data)
 	else
 	{
 		if (!check_command(cmd, data))
+		{
+			if (ft_strlen(data->argv[0]) == 2
+				&& ft_strncmp(data->argv[0], "cd", 2) == 0)
+				return (change_directory(data));
 			execute_fork(cmd, data, -1, 1);
+		}
 	}
-	if (ft_strlen(data->argv[0]) == 2
-		&& ft_strncmp(data->argv[0], "cd", 2) == 0)
-		return (change_directory(data));
 }
