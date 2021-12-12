@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/11 22:17:51 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/12 13:04:01 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	initialize(t_data *data, char **environ)
 	getcwd(data->path, PATH_MAX);
 	data->prev_dir = ft_strdup(data->path);
 	data->not_valid = 0;
+	data->pipe_nb = 0;
 }
 
 void	destroy(t_data *data)
