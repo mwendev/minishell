@@ -1,7 +1,7 @@
 Need to add:
-	support flag: ls -la
-	support path: /bin/ls/
-	support history
+	remove quotation mark
+	cd ../ ls not error
+	echo
 
 Need to fix:
 fix ctrl+D segmentation fault

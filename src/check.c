@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/12 17:52:13 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/12 18:51:07 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,9 +103,7 @@ int	check_command(char *cmd, t_data *data)
 		}
 		free(full_path);
 	}
-	printf("%s: command not found\n", cmd);
-	free(cmd);
 	free_split(split);
 	data->not_valid = 1;
-	return (1);
+	return (printf("%s: command not found\n", cmd));
 }
