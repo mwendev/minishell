@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/12 12:59:12 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/12 17:51:12 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,10 @@ typedef struct s_data
 
 void	change_directory(t_data *data);
 int	check_command(char *cmd, t_data *data);
+int	check_pipe_nb(char *cmd, t_data *data);
 char	**split_with_comma(char *line);
 void	execute_command(char *cmd, t_data *data);
 void	error(t_data *data, char *str, int end);
+void	free_split(char **str);
 
 #endif

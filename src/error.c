@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:54 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/11 22:42:08 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/12 17:54:10 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,4 +19,16 @@ void	error(t_data *data, char *str, int end)
 	if (end)
 		data->end = 1;
 	return ;
+}
+
+void	free_split(char **str)
+{
+	int	i;
+
+	i = -1;
+	if (!str)
+		return;
+	while (str[++i])
+		free(str[i]);
+	free(str);
 }
