@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/12 18:38:18 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/13 22:42:52 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int	check_pipe_nb(char *cmd, t_data *data);
 char	**split_with_comma(char *line);
 void	execute_command(char *cmd, t_data *data);
 void	error(t_data *data, char *str, int end);
-void	free_split(char **str);
+int	free_split(char **str);
+void	free_pipe(char **pipe_cmd, t_data *data);
 void	close_pipe(int piped, t_data *data);
 
 

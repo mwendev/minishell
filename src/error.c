@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:54 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/13 21:05:06 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/13 22:43:03 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	error(t_data *data, char *str, int end)
 	return ;
 }
 
-void	free_split(char **str)
+int	free_split(char **str)
 {
 	int	i;
 
@@ -31,6 +31,14 @@ void	free_split(char **str)
 	while (str[++i])
 		free(str[i]);
 	free(str);
+	return (0);
+}
+
+void	free_pipe(char **pipe_cmd, t_data *data)
+{
+	free_split(pipe_cmd);
+	free_split(data->pipe_fd);
+	data->pipe_fd = NULL;
 }
 
 void	close_pipe(int cmd_nb, t_data *data)

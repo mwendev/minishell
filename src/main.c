@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/13 21:32:29 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/13 22:39:31 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,19 @@ void	initialize(t_data *data, char **environ)
 
 void	destroy(t_data *data)
 {
-	int	i;
+	// int	i;
 
-	if (*(data->cmd))
-	{
-		i = 0;
-		while (*(data->cmd + i))
-			i++;
-		while (i-- > 0)
-			free(*(data->cmd + i));
-		free(data->cmd);
-	}
+	// if (*(data->cmd))
+	// {
+	// 	i = 0;
+	// 	while (*(data->cmd + i))
+	// 		i++;
+	// 	while (i-- > 0)
+	// 		free(*(data->cmd + i));
+	// 	free(data->cmd);
+	// }
+	free_split(data->cmd);
+	free(data->line);
 }
 
 void	split_commands(t_data *data)
@@ -79,8 +81,7 @@ int	main(void)
 		data.not_valid = 0;
 		while (*(data.cmd + (++i)) && !data.not_valid)
 			execute_command(*(data.cmd + i), &data);
-		free_split(data.cmd);
+		destroy(&data);
 	}
-	destroy(&data);
 	return (0);
 }

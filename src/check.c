@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/13 21:05:23 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/13 22:35:52 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,24 +68,12 @@ int	create_command(char *cmd, t_data *data)
 	return (0);
 }
 
-int	check_command(char *cmd, t_data *data)
+int	check_full_path(char **env_paths, char **split, t_data *data)
 {
-	char	*env_paths;
-	char	**split;
 	char	*full_path;
 	char	*add_slash;
 	int		i;
 
-	i = -1;
-	env_paths = check_path_in_env(data->envp, data);
-	if (!env_paths)
-	{
-		error(data, "no env path found", 0);
-		return (2);
-	}
-	if (create_command(cmd, data))
-		return (0);
-	split = ft_split(env_paths, ':');
 	while (split[++i])
 	{
 		if (ft_strchr(data->argv[0], '/'))
@@ -99,11 +87,35 @@ int	check_command(char *cmd, t_data *data)
 		if (!access(full_path, X_OK))
 		{
 			data->cmd_with_path = full_path;
-			return (0);
+			return (1);
 		}
 		free(full_path);
 	}
-	free_split(split);
-	data->not_valid = 1;
-	return (printf("%s: command not found\n", cmd));
+	return (0);
+}
+
+int	check_command(char *cmd, t_data *data)
+{
+	char	*env_paths;
+	char	**split;
+	int		i;
+
+	i = -1;
+	env_paths = check_path_in_env(data->envp, data);
+	if (!env_paths)
+	{
+		error(data, "no env path found", 0);
+		return (2);
+	}
+	if (create_command(cmd, data))
+		return (0);
+	split = ft_split(env_paths, ':');
+	if (check_full_path(env_paths, split, data))
+		return (free_split(split));
+	else
+	{
+		free_split(split);
+		data->not_valid = 1;
+		return (printf("%s: command not found\n", cmd));
+	}
 }
