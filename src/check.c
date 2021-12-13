@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/12 18:51:07 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/13 21:05:23 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	check_pipe_nb(char *cmd, t_data *data)
 	i = -1;
 	pipe_cmd = ft_split(cmd, '|');
 	while (pipe_cmd[++i])
-		continue;
+		continue ;
 	data->pipe_nb = i - 1;
 	free_split(pipe_cmd);
 	if (data->pipe_nb > 0)

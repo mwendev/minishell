@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/12 20:35:34 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/12 21:18:35 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	execute_fork(char *cmd, t_data *data, int cmd_nb, int end)
 	{
 		execute_fd(cmd_nb, data, end);
 		if (execve(data->cmd_with_path, data->argv, data->envp) < 0)
-			return (error(data, "exec failed", 0));
+			error(data, "exec failed", 0);
 	}
 }
 

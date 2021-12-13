@@ -1,8 +1,11 @@
 Need to add:
 	remove quotation mark
 	cd ../ ls not error
+	ls | cd ../ two prompts
 	echo
+	env export/unset
 
 Need to fix:
 fix ctrl+D segmentation fault
+cmd free(i removed the old free bc it give seg fault when ls | abc, now im not sure if it's properly freed)
 
