@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/12 21:05:12 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/13 21:32:29 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,10 @@ int	main(void)
 		free(promt);
 		split_commands(&data);
 		i = -1;
+		data.not_valid = 0;
 		while (*(data.cmd + (++i)) && !data.not_valid)
 			execute_command(*(data.cmd + i), &data);
+		free_split(data.cmd);
 	}
 	destroy(&data);
 	return (0);
