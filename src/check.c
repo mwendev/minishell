@@ -49,16 +49,31 @@ char	*check_path_in_env(char **envp, t_data *data)
 
 int	create_command(char *cmd, t_data *data)
 {
+	int		start;
+	int		end;
+
+	start = 0;
+	while (*(cmd + start) == '{' || *(cmd + start) == '(')
+		start++;
+	while (*(cmd + start) == '\'' || *(cmd + start) == '"')
+		start++;
+	end = ft_strlen(cmd) - 1;
+	while (end > start && (*(cmd + end) == '}' || *(cmd + start) == ')'))
+		end--;
+	while (end > start && (*(cmd + end) == '\'' || *(cmd + end) == '"'))
+		end--;
+	cmd = ft_substr(cmd, start, end - start + 1);
 	if (ft_strchr(cmd, '"') == NULL && ft_strchr(cmd, '\'') == NULL
 		&& ft_strchr(cmd, ' '))
 		data->argv = ft_split(cmd, ' ');
 	else if (ft_strchr(cmd, ' '))
-		data->argv = ft_split(cmd, ' '); //data->argv = split_with_comma(line);
+		data->argv = split_with_comma(cmd);
 	else
 	{
 		data->argv = ft_calloc(2, sizeof(char *));
 		data->argv[0] = ft_strdup(cmd);
 	}
+	free(cmd);
 	if (ft_strncmp(data->argv[0], "cd", ft_strlen(data->argv[0])) == 0
 		&& (ft_strncmp(data->argv[0], "cd", 2) == 0))
 	{

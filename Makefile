@@ -16,7 +16,7 @@ CFLAGS			=	-Wall -Wextra -Werror -g
 RM				=	rm -rf
 INCLUDE			=	libft/libft.h minishell.h
 
-SRCS_LIST		=	main.c builtin.c error.c check.c execute.c
+SRCS_LIST		=	main.c builtin.c error.c check.c execute.c input_split.c
 SRCS_DIR		=	src/
 SRCS			=	${addprefix ${SRCS_DIR}, ${SRCS}}
 
