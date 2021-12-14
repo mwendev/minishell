@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/14 17:05:20 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/14 18:00:58 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	initialize(t_data *data, char **environ)
 	data->pipe_nb = 0;
 }
 
-void	destroy(t_data *data)
+void	destroy(char *promt, t_data *data)
 {
 	// int	i;
 
@@ -40,16 +40,53 @@ void	destroy(t_data *data)
 	// 		free(*(data->cmd + i));
 	// 	free(data->cmd);
 	// }
-	free_split(data->cmd);
-	free(data->line);
+	free(promt);
+	if (data->cmd)
+	{
+		free_split(data->cmd);
+		data->cmd = NULL;
+	}
+	if (data->line)
+	{
+		free(data->line);
+		data->line = NULL;
+	}
 	data->not_valid = 0;
 }
 
-void	split_commands(t_data *data)
+char	*create_string(char c, int len, t_data *data)
+{
+	char	*str;
+
+	str = malloc(len + 1 * sizeof(char));
+	if (!str)
+	{
+		error(data, "malloc failed", 0);
+		return (NULL);
+	}
+	str[len] = 0;
+	str = ft_memset(str, c, len);
+	return (str);
+}
+
+void	process_line(t_data *data)
 {
 	int		i;
+	int		l;
 	char	*temp;
 
+	l = ft_strlen(data->line);
+	if (data->line[0] == '|' || data->line[0] == '^' || data->line[0] == ')'
+		|| data->line[0] == '&' || data->line[0] == '!' || data->line[0] == '/'
+		|| data->line[0] == '%' || data->line[0] == ';' || data->line[0] == '#'
+		|| !ft_strncmp(data->line, "}", l) || !ft_strncmp(data->line, "~", l)
+		|| !ft_strncmp(data->line, ".", l) || !ft_strncmp(data->line, ":", l)
+		|| !ft_strncmp(data->line, create_string(' ', l, data), l)
+		|| !ft_strncmp(data->line, create_string('*', l, data), l))
+	{
+		data->not_valid = 1;
+		return ;
+	}
 	data->cmd = ft_split(data->line, ';');
 	i = 0;
 	while (*(data->cmd + i))
@@ -76,12 +113,11 @@ int	main(void)
 		data.line = readline(promt);
 		if (data.line && *(data.line))
 			add_history(data.line);
-		free(promt);
-		split_commands(&data);
+		process_line(&data);
 		i = -1;
-		while (*(data.cmd + (++i)) && !data.not_valid)
+		while (data.cmd && *(data.cmd + (++i)) && !data.not_valid)
 			execute_command(*(data.cmd + i), &data);
-		destroy(&data);
+		destroy(promt, &data);
 	}
 	return (0);
 }
