@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/13 22:35:52 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/14 17:10:24 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,13 @@ int	create_command(char *cmd, t_data *data)
 	return (0);
 }
 
-int	check_full_path(char **env_paths, char **split, t_data *data)
+int	check_full_path(char *env_paths, char **split, t_data *data)
 {
 	char	*full_path;
 	char	*add_slash;
 	int		i;
 
+	i = -1;
 	while (split[++i])
 	{
 		if (ft_strchr(data->argv[0], '/'))
