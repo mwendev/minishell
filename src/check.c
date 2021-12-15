@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/14 17:10:24 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/15 14:41:53 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,42 +45,6 @@ char	*check_path_in_env(char **envp, t_data *data)
 	}
 	error(data, "No path found in env", 0);
 	return (NULL);
-}
-
-int	create_command(char *cmd, t_data *data)
-{
-	int		start;
-	int		end;
-
-	start = 0;
-	while (*(cmd + start) == '{' || *(cmd + start) == '(')
-		start++;
-	while (*(cmd + start) == '\'' || *(cmd + start) == '"')
-		start++;
-	end = ft_strlen(cmd) - 1;
-	while (end > start && (*(cmd + end) == '}' || *(cmd + start) == ')'))
-		end--;
-	while (end > start && (*(cmd + end) == '\'' || *(cmd + end) == '"'))
-		end--;
-	cmd = ft_substr(cmd, start, end - start + 1);
-	if (ft_strchr(cmd, '"') == NULL && ft_strchr(cmd, '\'') == NULL
-		&& ft_strchr(cmd, ' '))
-		data->argv = ft_split(cmd, ' ');
-	else if (ft_strchr(cmd, ' '))
-		data->argv = split_with_comma(cmd);
-	else
-	{
-		data->argv = ft_calloc(2, sizeof(char *));
-		data->argv[0] = ft_strdup(cmd);
-	}
-	free(cmd);
-	if (ft_strncmp(data->argv[0], "cd", ft_strlen(data->argv[0])) == 0
-		&& (ft_strncmp(data->argv[0], "cd", 2) == 0))
-	{
-		data->cmd_with_path = ft_strdup(data->argv[0]);
-		return (1);
-	}
-	return (0);
 }
 
 int	check_full_path(char *env_paths, char **split, t_data *data)

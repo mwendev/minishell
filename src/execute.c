@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/13 22:42:38 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/15 20:02:41 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	execute_fork(char *cmd, t_data *data, int cmd_nb, int end)
 		execute_fd(cmd_nb, data, end);
 		if (execve(data->cmd_with_path, data->argv, data->envp) < 0)
 			error(data, "exec failed", 0);
+		else run_builtin
 	}
 }
 
@@ -72,18 +73,14 @@ void	execute_pipe(char *cmd, t_data *data)
 
 void	execute_command(char *cmd, t_data *data)
 {
-	if (ft_strchr(cmd, '|') && check_pipe_nb(cmd, data))
-		execute_pipe(cmd, data);
-	else
-	{
-		if (!check_command(cmd, data))
-		{
-			if (ft_strlen(data->argv[0]) == 2
-				&& ft_strncmp(data->argv[0], "cd", 2) == 0)
-				return (change_directory(data));
-			execute_fork(cmd, data, -1, 1);
-			free(data->cmd_with_path);
-		}
-	}
-	waitpid(-1, NULL, 0);
+
+	if (ft_strlen(data->argv[0]) == 2
+		&& ft_strncmp(data->argv[0], "cd", 2) == 0)
+		return (change_directory(data));
+	//also check for other built in
+		//run_builtin
+	//else
+		execute_fork(cmd, data, -1, 1);
+		free(data->cmd_with_path);
+		waitpid(-1, NULL, 0);
 }

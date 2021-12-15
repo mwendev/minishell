@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:16 by aignacz           #+#    #+#             */
-/*   Updated: 2021/12/11 19:40:10 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/15 17:38:26 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,19 @@ void	change_directory(t_data *data)
 			getcwd(data->path, PATH_MAX);
 		}
 		free(dir);
+	}
+}
+
+void	change_env(t_data *data)
+{
+	char	**old;
+
+	old = data->envp;
+	/*if export*/
+	data->envp = ft_calloc(data->envp_len + 2, sizeof(char *));
+	if (data->envp)
+	{
+		data->envp = create_envp(old, data);
+		
 	}
 }

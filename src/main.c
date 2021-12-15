@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/15 13:40:21 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/15 20:04:46 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,17 @@ void	initialize(t_data *data, char **environ)
 	data->end = 0;
 	data->line = NULL;
 	data->cmd = NULL;
-	data->envp = environ;
+	data->envp = create_envp(environ, data);
 	data->prev_dir = ft_strdup(data->path);
+	data->special_char_check = ft_calloc(4, sizeof(char *));
+	if (!data->special_char_check)
+		error(data, "malloc for special character check failed", 1);
 	data->not_valid = 0;
 	data->pipe_nb = 0;
 }
 
 void	destroy(char *promt, t_data *data)
 {
-	// int	i;
-
-	// if (*(data->cmd))
-	// {
-	// 	i = 0;
-	// 	while (*(data->cmd + i))
-	// 		i++;
-	// 	while (i-- > 0)
-	// 		free(*(data->cmd + i));
-	// 	free(data->cmd);
-	// }
 	free(promt);
 	if (data->cmd)
 	{
@@ -50,52 +42,14 @@ void	destroy(char *promt, t_data *data)
 		free(data->line);
 		data->line = NULL;
 	}
+	if (data->special_char_check)
+	{
+		free_split(data->special_char_check);
+		data->special_char_check = ft_calloc(4, sizeof(char *));
+		if (!data->special_char_check)
+			error(data, "malloc for special character check failed", 1);
+	}
 	data->not_valid = 0;
-}
-
-char	*create_string(char c, int len, t_data *data)
-{
-	char	*str;
-
-	str = malloc(len + 1 * sizeof(char));
-	if (!str)
-	{
-		error(data, "malloc failed", 0);
-		return (NULL);
-	}
-	str[len] = 0;
-	str = ft_memset(str, c, len);
-	return (str);
-}
-
-void	process_line(t_data *data)
-{
-	int		i;
-	int		l;
-	char	*temp;
-
-	l = ft_strlen(data->line);
-	if (data->line[0] == '|' || data->line[0] == '^' || data->line[0] == ')'
-		|| data->line[0] == '&' || data->line[0] == '!' || data->line[0] == '#'
-		|| data->line[0] == '%' || data->line[0] == ';'
-		|| !ft_strncmp(data->line, "}", l) || !ft_strncmp(data->line, "~", l)
-		|| !ft_strncmp(data->line, ".", l) || !ft_strncmp(data->line, ":", l)
-		|| !ft_strncmp(data->line, create_string(' ', l, data), l)
-		|| !ft_strncmp(data->line, create_string('*', l, data), l)
-		|| !ft_strncmp(data->line, create_string('/', l, data), l))
-	{
-		data->not_valid = 1;
-		return ;
-	}
-	data->cmd = ft_split(data->line, ';');
-	i = 0;
-	while (*(data->cmd + i))
-	{
-		temp = ft_strtrim(*(data->cmd + i), " ");
-		free(*(data->cmd + i));
-		*(data->cmd + i) = temp;
-		i++;
-	}
 }
 
 int	main(void)
@@ -106,18 +60,21 @@ int	main(void)
 	extern char	**environ;
 
 	initialize(&data, environ);
-	while (!data.end)
+	while (1)
 	{
 		getcwd(data.path, PATH_MAX);
 		promt = ft_strjoin(data.path, ":> ");
 		data.line = readline(promt);
 		if (data.line && *(data.line))
 			add_history(data.line);
-		process_line(&data);
+		//input_split by pipe
+			//if pipe -> execute_pipe
+			//else if create_command & check_path
 		i = -1;
-		while (data.cmd && *(data.cmd + (++i)) && !data.not_valid)
-			execute_command(*(data.cmd + i), &data);
+		// while (data.cmd && *(data.cmd + (++i)) && !data.not_valid)
+		// 	execute_command(*(data.cmd + i), &data);
 		destroy(promt, &data);
 	}
+	free_split(data.envp);
 	return (0);
 }

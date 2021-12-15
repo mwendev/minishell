@@ -6,7 +6,7 @@
 #    By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/11 13:50:28 by mwen              #+#    #+#              #
-#    Updated: 2021/12/11 22:24:44 by mwen             ###   ########.fr        #
+#    Updated: 2021/12/15 14:36:57 by mwen             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ CFLAGS			=	-Wall -Wextra -Werror -g
 RM				=	rm -rf
 INCLUDE			=	libft/libft.h minishell.h
 
-SRCS_LIST		=	main.c builtin.c error.c check.c execute.c input_split.c
+SRCS_LIST		=	main.c builtin.c error.c check.c execute.c input_split.c\
+					create.c
 SRCS_DIR		=	src/
 SRCS			=	${addprefix ${SRCS_DIR}, ${SRCS}}
 
