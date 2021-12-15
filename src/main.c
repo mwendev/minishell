@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/15 13:39:02 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/15 13:40:21 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void	process_line(t_data *data)
 
 	l = ft_strlen(data->line);
 	if (data->line[0] == '|' || data->line[0] == '^' || data->line[0] == ')'
-		|| data->line[0] == '&' || data->line[0] == '!' 
-		|| data->line[0] == '%' || data->line[0] == ';' || data->line[0] == '#'
+		|| data->line[0] == '&' || data->line[0] == '!' || data->line[0] == '#'
+		|| data->line[0] == '%' || data->line[0] == ';'
 		|| !ft_strncmp(data->line, "}", l) || !ft_strncmp(data->line, "~", l)
 		|| !ft_strncmp(data->line, ".", l) || !ft_strncmp(data->line, ":", l)
 		|| !ft_strncmp(data->line, create_string(' ', l, data), l)
