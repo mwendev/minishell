@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/15 20:04:46 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/15 20:30:12 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,11 @@ int	main(void)
 		data.line = readline(promt);
 		if (data.line && *(data.line))
 			add_history(data.line);
-		//input_split by pipe
-			//if pipe -> execute_pipe
-			//else if create_command & check_path
-		i = -1;
-		// while (data.cmd && *(data.cmd + (++i)) && !data.not_valid)
-		// 	execute_command(*(data.cmd + i), &data);
+		data.cmd = split_with_comma(data.line, '|');
+		if (*(data.cmd + 1))
+			execute_pipe(&data);
+		else
+			execute_command(&data);
 		destroy(promt, &data);
 	}
 	free_split(data.envp);

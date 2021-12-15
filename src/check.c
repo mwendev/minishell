@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/15 14:41:53 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/15 20:41:07 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	check_full_path(char *env_paths, char **split, t_data *data)
 	return (0);
 }
 
-int	check_command(char *cmd, t_data *data)
+int	check_path(char *cmd, t_data *data)
 {
 	char	*env_paths;
 	char	**split;
@@ -87,8 +87,6 @@ int	check_command(char *cmd, t_data *data)
 		error(data, "no env path found", 0);
 		return (2);
 	}
-	if (create_command(cmd, data))
-		return (0);
 	split = ft_split(env_paths, ':');
 	if (check_full_path(env_paths, split, data))
 		return (free_split(split));

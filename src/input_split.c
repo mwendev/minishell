@@ -6,31 +6,13 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 20:20:13 by aignacz           #+#    #+#             */
-/*   Updated: 2021/12/14 16:42:34 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/15 20:17:33 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-
-int	count_char(char *str, char c)
-{
-	int	i;
-	int	res;
-
-	i = 0;
-	res = 0;
-	while (*(str + i))
-	{
-		if (*(str + i) == c && (i == 0 || *(str + i - 1) != '\\'))
-			res++;
-		i++;
-	}	
-	return (res);
-}
-
-void	word_count(char *line, int *words)
+void	word_count(char *line, int *words, char c)
 {
 	int	i;
 
@@ -38,10 +20,10 @@ void	word_count(char *line, int *words)
 	*words = 0;
 	while (*(line + i))
 	{
-		if (i == 0 || (*(line + i) == ' ' && *(line + i + 1) != '\0'))
+		if (i == 0 || (*(line + i) == c && *(line + i + 1) != '\0'))
 		{
 			*words += 1;
-			while (*(line + i) == ' ')
+			while (*(line + i) == c)
 				i++;
 			if (*(line + i) == '"')
 			{
@@ -59,7 +41,7 @@ void	word_count(char *line, int *words)
 	}
 }
 
-char	*get_next_word(char **pointer_place)
+char	*get_next_word(char **pointer_place, char c)
 {
 	char	*new_str;
 	char	*pointer;
@@ -68,12 +50,12 @@ char	*get_next_word(char **pointer_place)
 	int		len;
 
 	pointer = *pointer_place;
-	while (*pointer == ' ')
+	while (*pointer == c)
 		pointer++;
 	if (*pointer == '"')
 		ch = '"';
 	else
-		ch = ' ';
+		ch = c;
 	start = 0;
 	while (*(pointer + start) == ch)
 		start++;
@@ -88,20 +70,20 @@ char	*get_next_word(char **pointer_place)
 	return (new_str);
 }
 
-char	**split_with_comma(char *line)
+char	**split_with_comma(char *line, char c)
 {
 	int		words;
 	int		i;
 	char	**argv;
 	char	*pointer;
 
-	word_count(line, &words);
+	word_count(line, &words, c);
 	argv = (char **) malloc((words + 1) * sizeof(char *));
 	i = 0;
 	pointer = line;
 	while (i < words)
 	{
-		*(argv + i) = get_next_word(&pointer);
+		*(argv + i) = get_next_word(&pointer, c);
 		i++;
 	}
 	*(argv + i) = NULL;

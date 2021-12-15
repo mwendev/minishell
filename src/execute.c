@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/15 20:02:41 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/15 20:42:57 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,18 @@ void	execute_fork(char *cmd, t_data *data, int cmd_nb, int end)
 		execute_fd(cmd_nb, data, end);
 		if (execve(data->cmd_with_path, data->argv, data->envp) < 0)
 			error(data, "exec failed", 0);
-		else run_builtin
+		else
+			run_builtin();
 	}
 }
 
-void	execute_pipe(char *cmd, t_data *data)
+void	execute_pipe(t_data *data)
 {
 	char	**pipe_cmd;
 	int		i;
 
 	data->pipe_fd = malloc(data->pipe_nb * 2 * sizeof(int));
-	pipe_cmd = ft_split(cmd, '|');
+	pipe_cmd = data->cmd;
 	i = -1;
 	while (pipe_cmd[++i] && !check_command(pipe_cmd[i], data))
 	{
@@ -71,16 +72,18 @@ void	execute_pipe(char *cmd, t_data *data)
 	free_pipe(pipe_cmd, data);
 }
 
-void	execute_command(char *cmd, t_data *data)
+void	execute_command(t_data *data)
 {
+	char	*cmd;
 
+	cmd = *(data->cmd);
+	if (!create_command(cmd, data))
+		check_path(cmd, data);
+	//then check if it's builtin:
 	if (ft_strlen(data->argv[0]) == 2
 		&& ft_strncmp(data->argv[0], "cd", 2) == 0)
 		return (change_directory(data));
-	//also check for other built in
-		//run_builtin
-	//else
-		execute_fork(cmd, data, -1, 1);
-		free(data->cmd_with_path);
-		waitpid(-1, NULL, 0);
+	execute_fork(cmd, data, -1, 1);
+	free(data->cmd_with_path);
+	waitpid(-1, NULL, 0);
 }
