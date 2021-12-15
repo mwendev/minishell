@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/14 18:00:58 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/15 13:39:02 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	initialize(t_data *data, char **environ)
 	data->line = NULL;
 	data->cmd = NULL;
 	data->envp = environ;
-	getcwd(data->path, PATH_MAX);
 	data->prev_dir = ft_strdup(data->path);
 	data->not_valid = 0;
 	data->pipe_nb = 0;
@@ -77,12 +76,13 @@ void	process_line(t_data *data)
 
 	l = ft_strlen(data->line);
 	if (data->line[0] == '|' || data->line[0] == '^' || data->line[0] == ')'
-		|| data->line[0] == '&' || data->line[0] == '!' || data->line[0] == '/'
+		|| data->line[0] == '&' || data->line[0] == '!' 
 		|| data->line[0] == '%' || data->line[0] == ';' || data->line[0] == '#'
 		|| !ft_strncmp(data->line, "}", l) || !ft_strncmp(data->line, "~", l)
 		|| !ft_strncmp(data->line, ".", l) || !ft_strncmp(data->line, ":", l)
 		|| !ft_strncmp(data->line, create_string(' ', l, data), l)
-		|| !ft_strncmp(data->line, create_string('*', l, data), l))
+		|| !ft_strncmp(data->line, create_string('*', l, data), l)
+		|| !ft_strncmp(data->line, create_string('/', l, data), l))
 	{
 		data->not_valid = 1;
 		return ;
