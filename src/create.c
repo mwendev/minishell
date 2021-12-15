@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/15 17:33:40 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/15 20:48:10 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,16 @@
 
 int	create_command(char *cmd, t_data *data)
 {
-	int		start;
-	int		end;
-
-	start = 0;
-	while (*(cmd + start) == '{' || *(cmd + start) == '(')
-		start++;
-	while (*(cmd + start) == '\'' || *(cmd + start) == '"')
-		start++;
-	end = ft_strlen(cmd) - 1;
-	while (end > start && (*(cmd + end) == '}' || *(cmd + start) == ')'))
-		end--;
-	while (end > start && (*(cmd + end) == '\'' || *(cmd + end) == '"'))
-		end--;
-	cmd = ft_substr(cmd, start, end - start + 1);
 	if (ft_strchr(cmd, '"') == NULL && ft_strchr(cmd, '\'') == NULL
 		&& ft_strchr(cmd, ' '))
 		data->argv = ft_split(cmd, ' ');
 	else if (ft_strchr(cmd, ' '))
-		data->argv = split_with_comma(cmd);
+		data->argv = split_with_comma(cmd, ' ');
 	else
 	{
 		data->argv = ft_calloc(2, sizeof(char *));
 		data->argv[0] = ft_strdup(cmd);
 	}
-	free(cmd);
 	if (ft_strncmp(data->argv[0], "cd", ft_strlen(data->argv[0])) == 0
 		&& (ft_strncmp(data->argv[0], "cd", 2) == 0))
 	{
