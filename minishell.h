@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/15 20:42:54 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/18 21:44:07 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_data
 void	change_directory(t_data *data);
 int		check_path(char *cmd, t_data *data);
 int		check_pipe_nb(char *cmd, t_data *data);
+int		check_line(t_data *data);
 int		create_command(char *cmd, t_data *data);
 char	*create_string(int count, char c, int len, t_data *data);
 char	**create_envp(char **environ, t_data *data);
