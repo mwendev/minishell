@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 18:38:43 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 20:57:58 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,19 @@ int	is_builtin(char *cmd, t_data *data)
 	int		ret;
 
 	ret = 1;
-	if (!ft_strncmp(cmd, "echo", ft_strlen(cmd)))
+	if (ft_strlen(cmd) == 4 && !ft_strncmp(cmd, "echo", ft_strlen(cmd)))
 		ret = 1;
-	else if (!ft_strncmp(cmd, "cd", ft_strlen(cmd)))
+	else if (ft_strlen(cmd) == 2 && !ft_strncmp(cmd, "cd", ft_strlen(cmd)))
 		change_directory(data);
-	else if (!ft_strncmp(cmd, "pwd", ft_strlen(cmd)))
+	else if (ft_strlen(cmd) == 3 && !ft_strncmp(cmd, "pwd", ft_strlen(cmd)))
 		ret = 1;
-	else if (!ft_strncmp(cmd, "export", ft_strlen(cmd)))
+	else if (ft_strlen(cmd) == 6 && !ft_strncmp(cmd, "export", ft_strlen(cmd)))
 		ret = 1;
-	else if (!ft_strncmp(cmd, "unset", ft_strlen(cmd)))
+	else if (ft_strlen(cmd) == 5 && !ft_strncmp(cmd, "unset", ft_strlen(cmd)))
 		ret = 1;
-	else if (!ft_strncmp(cmd, "env", ft_strlen(cmd)))
+	else if (ft_strlen(cmd) == 3 && !ft_strncmp(cmd, "env", ft_strlen(cmd)))
 		ret = 1;
-	else if (!ft_strncmp(cmd, "exit", ft_strlen(cmd)))
+	else if (ft_strlen(cmd) == 4 && !ft_strncmp(cmd, "exit", ft_strlen(cmd)))
 		ret = 1;
 	else
 		ret = 0;
@@ -71,11 +71,14 @@ void	execute_command(char *cmd, t_data *data, int cmd_nb, int end)
 {
 	if (is_builtin(cmd, data))
 		return ;
-	else if (!create_command(cmd, data))
+	else
 	{
-		check_path(cmd, data);
-		execute_fork(cmd, data, cmd_nb, end);
-		free(data->cmd_with_path);
+		data->argv = split_with_comma(cmd, ' ', data);
+		if (!check_path(cmd, data))
+			execute_fork(cmd, data, cmd_nb, end);
+		if (data->cmd_with_path)
+			free(data->cmd_with_path);
+		free_split(data->argv);
 		waitpid(-1, NULL, 0);
 	}
 }

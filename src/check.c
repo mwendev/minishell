@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 16:46:36 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 20:52:06 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int	check_full_path(char *env_paths, char **split, t_data *data)
 			return (1);
 		}
 		free(full_path);
+		data->cmd_with_path = NULL;
 	}
 	return (0);
 }
@@ -94,7 +95,7 @@ int	check_path(char *cmd, t_data *data)
 	{
 		free_split(split);
 		data->not_valid = 1;
-		return (printf("%s: command not found\n", cmd));
+		return (printf("%s: command not found\n", data->argv[0]));
 	}
 }
 

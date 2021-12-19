@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 20:20:13 by aignacz           #+#    #+#             */
-/*   Updated: 2021/12/19 17:20:34 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 20:08:25 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	word_count_col(char *line, char c)
 		else if (inquote < 2 && *(line + i) == '"')
 			inquote = (inquote + 1) % 2;
 		else if (inquote % 2 == 0 && *(line + i) == '\'')
-			inquote = (inquote + 1) % 2;
+			inquote = (inquote + 2) % 4;
 		i++;
 		if (ft_strchr(line + i, c) == NULL)
 			return (words + 1);
@@ -74,6 +74,7 @@ char	*get_next_word_col(char **pointer_place)
 {
 	char	*new_str;
 	char	*pointer;
+	char	c;
 	int		start;
 	int		len;
 
@@ -82,9 +83,10 @@ char	*get_next_word_col(char **pointer_place)
 	len = 0;
 	while (*(pointer + start + len) && *(pointer + start + len) != '|')
 	{
-		if (*(pointer + start + len++) == '"')
+		c = *(pointer + start + len++);
+		if (c == '"' || c == '\'')
 		{
-			while (*(pointer + start + len) && *(pointer + start + len) != '"')
+			while (*(pointer + start + len) && *(pointer + start + len) != c)
 				len++;
 			if (*(pointer + start + len))
 				len++;
