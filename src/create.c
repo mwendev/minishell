@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 23:11:22 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/20 00:35:48 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,21 @@ char	**create_envp(char **envp, t_data *data, char *target)
 	}
 	else
 		error(data, "malloc for envp failed", 1);
-	int f = -1;
-	while (dup[++f])
-		printf("%s\n", dup[f]);
 	return (dup);
+}
+
+char	*create_echo_arg(char *str, t_data *data)
+{
+	char	*ret;
+	char	**split;
+
+	ret = NULL;
+	if (data->echo_quote == 1)
+		return (str);
+	else
+		ret = has_target(data->envp, str + 1);
+		if (!ret)
+			return ("");
+		else
+			return (ret + ft_strlen(str));
 }

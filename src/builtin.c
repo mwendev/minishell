@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:16 by aignacz           #+#    #+#             */
-/*   Updated: 2021/12/19 22:43:25 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/20 00:23:43 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,19 @@ void	change_directory(t_data *data)
 	}
 }
 
-int	has_target(char **envp, char *target)
+char	*has_target(char **envp, char *target)
 {
-	int	ret;
-	int	i;
+	char	*ret;
+	int		i;
 
 	i = -1;
-	ret = 0;
+	ret = NULL;
 	while (envp[++i])
-		if (ft_strnstr(envp[i], target, ft_strlen(envp[i])))
-			ret = 1;
+	{
+		ret = ft_strnstr(envp[i], target, ft_strlen(envp[i]));
+		if (ret)
+			return (ret);
+	}
 	return (ret);
 }
 

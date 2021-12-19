@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 22:42:58 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/20 00:28:03 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_data
 	int		pipe_nb;
 	int		*pipe_fd;
 	int		envp_len;
+	int		echo_quote;
 	char	*cmd_with_path;
 	char	**argv;
 	char	**envp;
@@ -58,5 +59,7 @@ int		free_split(char **str);
 void	free_pipe(char **pipe_cmd, t_data *data);
 void	close_pipe(int piped, t_data *data);
 void	signal_init(void);
+char	*has_target(char **envp, char *target);
+char	*create_echo_arg(char *str, t_data *data);
 
 #endif

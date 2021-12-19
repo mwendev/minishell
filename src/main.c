@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 22:43:08 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/20 00:06:25 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	initialize(t_data *data, char **environ)
 	ft_bzero(data->prev_dir, PATH_MAX);
 	data->not_valid = 0;
 	data->pipe_nb = 0;
+	data->echo_quote = 0;
 	//signal_init();
 }
 
@@ -43,11 +44,6 @@ void	destroy(t_data *data)
 		data->line = NULL;
 	}
 	data->not_valid = 0;
-}
-
-void	free_at_end(t_data *data)
-{
-	free_split(data->envp);
 }
 
 void	read_command_line(t_data *data)
@@ -73,7 +69,6 @@ void	read_command_line(t_data *data)
 
 int	main(void)
 {
-	char		*temp;
 	t_data		data;
 	extern char	**environ;
 
@@ -89,6 +84,6 @@ int	main(void)
 			execute_command(data.cmd[0], &data, -1, 1);
 		destroy(&data);
 	}
-	free_at_end(&data);
+	free_split(data.envp);
 	return (0);
 }

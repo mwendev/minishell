@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 22:47:44 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/20 00:28:56 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,14 @@ int	is_builtin(char *arg, t_data *data)
 	if (ft_strlen(arg) == 4 && !ft_strncmp(arg, "echo", ft_strlen(arg)))
 	{
 		if (!ft_strncmp(data->argv[1], "-n", ft_strlen(data->argv[1])))
-			printf("%s", data->argv[2]);
+			printf("%s", create_echo_arg(data->argv[2], data));
 		else
-			printf("%s\n", data->argv[1]);
+			printf("%s\n", create_echo_arg(data->argv[1], data));
 	}
 	else if (ft_strlen(arg) == 2 && !ft_strncmp(arg, "cd", ft_strlen(arg)))
 		change_directory(data);
 	else if (ft_strlen(arg) == 3 && !ft_strncmp(arg, "pwd", ft_strlen(arg)))
-	{
-		getcwd(data->path, PATH_MAX);
 		printf("%s\n", data->path);
-	}
 	else if (ft_strlen(arg) == 6 && !ft_strncmp(arg, "export", ft_strlen(arg)))
 		change_env(data, 1, data->argv[1]);
 	else if (ft_strlen(arg) == 5 && !ft_strncmp(arg, "unset", ft_strlen(arg)))
@@ -77,21 +74,19 @@ int	is_builtin(char *arg, t_data *data)
 
 void	execute_command(char *cmd, t_data *data, int cmd_nb, int end)
 {
-	data->argv = split_with_comma(cmd, ' ', data);
-	if (is_builtin(data->argv[0], data))
+	if (!data->not_valid)
 	{
+		data->argv = split_with_comma(cmd, ' ', data);
+		if (!is_builtin(data->argv[0], data))
+		{
+			if (!check_path(cmd, data))
+				execute_fork(cmd, data, cmd_nb, end);
+			if (data->cmd_with_path)
+				free(data->cmd_with_path);
+			waitpid(-1, NULL, 0);
+		}
 		free_split(data->argv);
-		return ;
 	}
-	else
-	{
-		if (!check_path(cmd, data))
-			execute_fork(cmd, data, cmd_nb, end);
-		if (data->cmd_with_path)
-			free(data->cmd_with_path);
-		waitpid(-1, NULL, 0);
-	}
-	free_split(data->argv);
 }
 
 void	execute_pipe(t_data *data)
