@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:16 by aignacz           #+#    #+#             */
-/*   Updated: 2021/12/19 21:44:07 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 22:20:05 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,56 @@ void	change_directory(t_data *data)
 	}
 }
 
-void	change_env(t_data *data)
+int	has_target(char **envp, char *target)
+{
+	int	ret;
+	int	i;
+
+	i = -1;
+	ret = 0;
+	while (envp[++i])
+		if (ft_strnstr(envp[i], target, ft_strlen(envp[i])))
+			ret = 1;
+	return (ret);
+}
+
+char	*trim_target(char *target)
+{
+	char	*ret;
+	char	**split;
+
+	split = ft_split(target, '=');
+	ret = ft_strdup(split[0]);
+	free_split(split);
+	return (ret);
+}
+
+void	change_env(t_data *data, int cmd, char *target)
 {
 	char	**old;
+	char	*dup;
+	int		i;
 
 	old = data->envp;
-	/*if export*/
-	data->envp = ft_calloc(data->envp_len + 2, sizeof(char *));
-	if (data->envp)
+	i = -1;
+	if (cmd)
 	{
-		data->envp = create_envp(old, data);
-		
+		if (!has_target(old, target) && cmd == 2)
+			return ;
+		dup = ft_strdup(target);
+		target = trim_target(target);
+		if (has_target(old, target) && cmd == 2)
+			data->envp_len--;
+		else if (!has_target(old, target) && cmd == 1)
+			data->envp_len++;
+		data->envp = create_envp(old, data, target);
+		if (cmd == 1)
+			data->envp[data->envp_len - 1] = ft_strdup(dup);
+		free(dup);
+		free(target);
+		free_split(old);
 	}
+	else
+		while (old[++i])
+			printf("%s\n", old[i]);
 }

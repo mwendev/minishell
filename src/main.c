@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 22:10:23 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 22:22:36 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	initialize(t_data *data, char **environ)
 	data->cmd = NULL;
 	data->cmd_with_path = NULL;
 	data->argv = NULL;
-	data->envp = create_envp(environ, data);
+	data->envp_len = check_envplen(environ);
+	data->envp = create_envp(environ, data, NULL);
 	ft_bzero(data->path, PATH_MAX);
 	data->prev_dir = ft_strdup(data->path);
 	data->not_valid = 0;

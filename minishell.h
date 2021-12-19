@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 22:09:31 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 22:23:44 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,13 @@ typedef struct s_data
 
 void	change_directory(t_data *data);
 int		check_path(char *cmd, t_data *data);
-int		check_pipe_nb(char *cmd, t_data *data);
 int		check_line(t_data *data);
-int		create_command(char *cmd, t_data *data);
-char	*create_string(int count, char c, int len, t_data *data);
-char	**create_envp(char **environ, t_data *data);
+int		check_envplen(char **envp);
+char	**create_envp(char **envp, t_data *data, char *target);
 char	**split_with_comma(char *line, char c, t_data *data);
 void	execute_command(char *cmd, t_data *data, int cmd_nb, int end);
 void	execute_pipe(t_data *data);
+void	change_env(t_data *data, int cmd, char *target);
 void	error(t_data *data, char *str, int end);
 int		free_split(char **str);
 void	free_pipe(char **pipe_cmd, t_data *data);

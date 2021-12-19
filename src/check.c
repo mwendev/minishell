@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 20:52:06 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 22:23:07 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	check_envplen(char **envp)
+{
+	int	len;
+
+	len = 0;
+	while (envp[len])
+		len++;
+	return (len);
+}
 
 int	check_pipe_nb(char *cmd, t_data *data)
 {
