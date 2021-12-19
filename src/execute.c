@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 20:57:58 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 21:32:04 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,10 @@ void	execute_pipe(t_data *data)
 		if (pipe_cmd[i + 1])
 		{
 			if (pipe(data->pipe_fd + i * 2) == -1)
+			{
+				free(data->pipe_fd);
 				return (error(data, "pipe failed", 0));
+			}
 			else
 				execute_command(pipe_cmd[i], data, i, 0);
 		}
@@ -106,4 +109,5 @@ void	execute_pipe(t_data *data)
 			close_pipe(i, data);
 		waitpid(-1, NULL, 0);
 	}
+	free(data->pipe_fd);
 }

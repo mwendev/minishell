@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 19:01:39 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 21:09:04 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,14 @@
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <sys/syslimits.h>
-# include <sys/wait.h>
 # include <signal.h>
+# include <sys/wait.h>
+
+# ifdef __linux__
+#  include <limits.h>
+# else
+#  include <sys/syslimits.h>
+# endif
 
 typedef struct s_data
 {

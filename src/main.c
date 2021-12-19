@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 18:51:04 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 21:26:02 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	initialize(t_data *data, char **environ)
 	data->prev_dir = ft_strdup(data->path);
 	data->not_valid = 0;
 	data->pipe_nb = 0;
-	// signal_init();
+	signal_init();
 }
 
 void	destroy(t_data *data)
@@ -42,6 +42,12 @@ void	destroy(t_data *data)
 		data->line = NULL;
 	}
 	data->not_valid = 0;
+}
+
+void	free_at_end(t_data *data)
+{
+	free_split(data->envp);
+	free(data->prev_dir);
 }
 
 void	read_command_line(t_data *data)
@@ -73,7 +79,8 @@ int	main(void)
 	extern char	**environ;
 
 	initialize(&data, environ);
-	while (1)
+	i = 0;
+	while (i < 3)
 	{
 		getcwd(data.path, PATH_MAX);
 		read_command_line(&data);
@@ -83,7 +90,8 @@ int	main(void)
 		else if (*(data.cmd))
 			execute_command(data.cmd[0], &data, -1, 1);
 		destroy(&data);
+		i++;
 	}
-	free_split(data.envp);
+	free_at_end(&data);
 	return (0);
 }

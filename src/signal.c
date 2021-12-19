@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/19 13:39:15 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 18:50:50 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 19:03:08 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	signal_handler(int	signum, siginfo_t *info, void *unused)
+void	signal_handler(int signum, siginfo_t *info, void *unused)
 {
 	(void)unused;
 	(void)info;
 	if (signum == SIGINT)
 	{
 		printf("\b\b  \n");
-		// rl_replace_line("", 0);
+		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
