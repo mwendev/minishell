@@ -1,7 +1,4 @@
 Need to add:
-	remove quotation mark
-		- see the order
-		- waiting for the closing '")}
 	cd ../ ls not error
 	ls | cd ../ two prompts
 	echo

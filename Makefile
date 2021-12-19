@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+         #
+#    By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/11 13:50:28 by mwen              #+#    #+#              #
-#    Updated: 2021/12/15 14:36:57 by mwen             ###   ########.fr        #
+#    Updated: 2021/12/19 18:47:20 by aignacz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ RM				=	rm -rf
 INCLUDE			=	libft/libft.h minishell.h
 
 SRCS_LIST		=	main.c builtin.c error.c check.c execute.c input_split.c\
-					create.c
+					create.c signal.c
 SRCS_DIR		=	src/
 SRCS			=	${addprefix ${SRCS_DIR}, ${SRCS}}
 

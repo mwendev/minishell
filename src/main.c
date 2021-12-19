@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 18:15:32 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 18:51:04 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ void	initialize(t_data *data, char **environ)
 	data->line = NULL;
 	data->cmd = NULL;
 	data->cmd_with_path = NULL;
+	data->argv = NULL;
 	data->envp = create_envp(environ, data);
 	ft_bzero(data->path, PATH_MAX);
 	data->prev_dir = ft_strdup(data->path);
 	data->not_valid = 0;
 	data->pipe_nb = 0;
+	// signal_init();
 }
 
 void	destroy(t_data *data)
@@ -79,7 +81,7 @@ int	main(void)
 		if (*(data.cmd) && *(data.cmd + 1))
 			execute_pipe(&data);
 		else if (*(data.cmd))
-			execute_command(&data);
+			execute_command(data.cmd[0], &data, -1, 1);
 		destroy(&data);
 	}
 	free_split(data.envp);

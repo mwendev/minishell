@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 17:30:15 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 18:38:43 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,43 @@ void	execute_fork(char *cmd, t_data *data, int cmd_nb, int end)
 		execute_fd(cmd_nb, data, end);
 		if (execve(data->cmd_with_path, data->argv, data->envp) < 0)
 			error(data, "exec failed", 0);
-		//else
-			//run_builtin();
+	}
+}
+
+int	is_builtin(char *cmd, t_data *data)
+{
+	int		ret;
+
+	ret = 1;
+	if (!ft_strncmp(cmd, "echo", ft_strlen(cmd)))
+		ret = 1;
+	else if (!ft_strncmp(cmd, "cd", ft_strlen(cmd)))
+		change_directory(data);
+	else if (!ft_strncmp(cmd, "pwd", ft_strlen(cmd)))
+		ret = 1;
+	else if (!ft_strncmp(cmd, "export", ft_strlen(cmd)))
+		ret = 1;
+	else if (!ft_strncmp(cmd, "unset", ft_strlen(cmd)))
+		ret = 1;
+	else if (!ft_strncmp(cmd, "env", ft_strlen(cmd)))
+		ret = 1;
+	else if (!ft_strncmp(cmd, "exit", ft_strlen(cmd)))
+		ret = 1;
+	else
+		ret = 0;
+	return (ret);
+}
+
+void	execute_command(char *cmd, t_data *data, int cmd_nb, int end)
+{
+	if (is_builtin(cmd, data))
+		return ;
+	else if (!create_command(cmd, data))
+	{
+		check_path(cmd, data);
+		execute_fork(cmd, data, cmd_nb, end);
+		free(data->cmd_with_path);
+		waitpid(-1, NULL, 0);
 	}
 }
 
@@ -55,37 +90,17 @@ void	execute_pipe(t_data *data)
 	i = -1;
 	while (pipe_cmd[++i])
 	{
-		if (!create_command(pipe_cmd[i], data))
-			check_path(pipe_cmd[i], data);
 		if (pipe_cmd[i + 1])
 		{
 			if (pipe(data->pipe_fd + i * 2) == -1)
 				return (error(data, "pipe failed", 0));
 			else
-				execute_fork(pipe_cmd[i], data, i, 0);
+				execute_command(pipe_cmd[i], data, i, 0);
 		}
 		else
-			execute_fork(pipe_cmd[i], data, i, 1);
+			execute_command(pipe_cmd[i], data, i, 1);
 		if (i >= 1)
 			close_pipe(i, data);
-		//free(data->cmd_with_path);
 		waitpid(-1, NULL, 0);
 	}
-	//free_pipe(pipe_cmd, data);
-}
-
-void	execute_command(t_data *data)
-{
-	char	*cmd;
-
-	cmd = *(data->cmd);
-	if (!create_command(cmd, data))
-		check_path(cmd, data);
-	//then check if it's builtin:
-	if (ft_strlen(data->argv[0]) == 2
-		&& ft_strncmp(data->argv[0], "cd", 2) == 0)
-		return (change_directory(data));
-	execute_fork(cmd, data, -1, 1);
-	free(data->cmd_with_path);
-	waitpid(-1, NULL, 0);
 }

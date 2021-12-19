@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 17:21:00 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 18:45:46 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/syslimits.h>
+# include <signal.h>
 
 typedef struct s_data
 {
@@ -45,11 +46,12 @@ int		create_command(char *cmd, t_data *data);
 char	*create_string(int count, char c, int len, t_data *data);
 char	**create_envp(char **environ, t_data *data);
 char	**split_with_comma(char *line, char c, t_data *data);
-void	execute_command(t_data *data);
+void	execute_command(char *cmd, t_data *data, int cmd_nb, int end);
 void	execute_pipe(t_data *data);
 void	error(t_data *data, char *str, int end);
 int		free_split(char **str);
 void	free_pipe(char **pipe_cmd, t_data *data);
 void	close_pipe(int piped, t_data *data);
+void	signal_init(void);
 
 #endif
