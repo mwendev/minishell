@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/15 20:41:07 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 16:46:36 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,3 +97,56 @@ int	check_path(char *cmd, t_data *data)
 		return (printf("%s: command not found\n", cmd));
 	}
 }
+
+int	check_line(t_data *data)
+{
+	int		inqoute;
+	int		i;
+	char	c;
+
+	i = 0;
+	inqoute = 0;
+	while (*(data->line + i))
+	{
+		if (!inqoute && (*(data->line + i) == '"' || *(data->line + i) == '\''))
+		{
+			inqoute = 1;
+			c = *(data->line + i);
+		}
+		else if (inqoute && *(data->line + i) == c)
+			inqoute = 0;
+		i++;
+	}
+	return (inqoute);
+	while (!inqoute && --i >= 0 && *(data->line + i) != '|')
+	{
+		if (ft_isalpha((int) *(data->line + i)) || *(data->line + i) == '"'
+			|| *(data->line + i) == '\'')
+			return (0);
+	}
+	return (1);
+}
+
+/*int	check_line(t_data *data)
+{
+	int		var;
+	int		i;
+	char	*last_pipe;
+	char	*last_quote;
+	char	*last_dquote;
+
+	if (check_quotes(data))
+		return (1);
+	last_pipe = ft_strrchr(data->line, '|');
+	last_dquote = ft_strrchr(data->line, '"');
+	last_quote = ft_strrchr(data->line, '\'');
+	i = 0;
+	var = 0;
+	while (last_pipe && *(last_pipe + i) && !var)
+		var = ft_isalpha((int) *(last_pipe + i++));
+	if (last_pipe == NULL || (last_quote != NULL && last_pipe < last_quote)
+		|| (last_dquote != NULL && last_pipe < last_dquote) || var)
+		return (0);
+	return (1);
+}
+*/

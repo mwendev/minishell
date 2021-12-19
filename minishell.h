@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/18 21:44:07 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 17:21:00 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		check_line(t_data *data);
 int		create_command(char *cmd, t_data *data);
 char	*create_string(int count, char c, int len, t_data *data);
 char	**create_envp(char **environ, t_data *data);
-char	**split_with_comma(char *line, char c);
+char	**split_with_comma(char *line, char c, t_data *data);
 void	execute_command(t_data *data);
 void	execute_pipe(t_data *data);
 void	error(t_data *data, char *str, int end);

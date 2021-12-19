@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 20:20:13 by aignacz           #+#    #+#             */
-/*   Updated: 2021/12/18 19:55:05 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 17:20:34 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ int	word_count_col(char *line, char c)
 			while (*(line + i + 1) == c)
 				i++;
 		}
-		else if (*(line + i) == '"')
+		else if (inquote < 2 && *(line + i) == '"')
+			inquote = (inquote + 1) % 2;
+		else if (inquote % 2 == 0 && *(line + i) == '\'')
 			inquote = (inquote + 1) % 2;
 		i++;
 		if (ft_strchr(line + i, c) == NULL)
@@ -109,10 +111,10 @@ char	*get_next_word(char **pointer_place)
 	ch = ' ';
 	while (*(pointer + start) == ' ')
 		start++;
-	if (*(pointer + start) == '"')
+	if (*(pointer + start) == '"' || *(pointer + start) == '\'')
 	{
+		ch = *(pointer + start);
 		start++;
-		ch = '"';
 	}
 	while (*(pointer + start + len) && *(pointer + start + len) != ch)
 		len++;
@@ -124,7 +126,7 @@ char	*get_next_word(char **pointer_place)
 	return (ft_substr(pointer, start, len));
 }
 
-char	**split_with_comma(char *line, char c)
+char	**split_with_comma(char *line, char c, t_data *data)
 {
 	int		words;
 	int		i;
@@ -135,6 +137,8 @@ char	**split_with_comma(char *line, char c)
 		words = word_count_col(line, c);
 	else
 		words = word_count(line, c);
+	if (c == '|')
+		data->pipe_nb = words;
 	argv = (char **) malloc((words + 1) * sizeof(char *));
 	i = 0;
 	pointer = line;
@@ -149,26 +153,3 @@ char	**split_with_comma(char *line, char c)
 	*(argv + i) = NULL;
 	return (argv);
 }
-
-/*
-int main()
-{
-	char	*s1 = "|echo \"valami | valami\" | ls \"-la\"| grep \"a\"  |  ";
-	char	**argv;
-	char	**argv2;
-
-	printf("Split | :\n%s$\n", s1);
-	argv = split_with_comma(s1, '|');
-	while (*argv)
-	{
-		printf("%s$\n", *argv);
-		argv2 = split_with_comma(*argv, ' ');
-		while (*argv2)
-		{
-			printf("%s$\n", *argv2);
-			argv2++;
-		}	
-		argv++;
-	}
-}
-*/

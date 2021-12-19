@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/15 20:42:57 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 17:30:15 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ void	execute_fork(char *cmd, t_data *data, int cmd_nb, int end)
 		execute_fd(cmd_nb, data, end);
 		if (execve(data->cmd_with_path, data->argv, data->envp) < 0)
 			error(data, "exec failed", 0);
-		else
-			run_builtin();
+		//else
+			//run_builtin();
 	}
 }
 
@@ -53,8 +53,10 @@ void	execute_pipe(t_data *data)
 	data->pipe_fd = malloc(data->pipe_nb * 2 * sizeof(int));
 	pipe_cmd = data->cmd;
 	i = -1;
-	while (pipe_cmd[++i] && !check_command(pipe_cmd[i], data))
+	while (pipe_cmd[++i])
 	{
+		if (!create_command(pipe_cmd[i], data))
+			check_path(pipe_cmd[i], data);
 		if (pipe_cmd[i + 1])
 		{
 			if (pipe(data->pipe_fd + i * 2) == -1)
@@ -66,10 +68,10 @@ void	execute_pipe(t_data *data)
 			execute_fork(pipe_cmd[i], data, i, 1);
 		if (i >= 1)
 			close_pipe(i, data);
-		free(data->cmd_with_path);
+		//free(data->cmd_with_path);
 		waitpid(-1, NULL, 0);
 	}
-	free_pipe(pipe_cmd, data);
+	//free_pipe(pipe_cmd, data);
 }
 
 void	execute_command(t_data *data)

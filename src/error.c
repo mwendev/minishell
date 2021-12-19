@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:54 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/14 18:03:36 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/18 19:43:30 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	error(t_data *data, char *str, int end)
 {
 	perror(str);
 	data->not_valid = 1;
-	if (end)
-		data->end = 1;
+//	if (end)
+//		data->end = 1;
 	return ;
 }
 

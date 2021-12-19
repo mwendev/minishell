@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/15 20:48:10 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 17:26:14 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	create_command(char *cmd, t_data *data)
 {
-	if (ft_strchr(cmd, '"') == NULL && ft_strchr(cmd, '\'') == NULL
+	/*if (ft_strchr(cmd, '"') == NULL && ft_strchr(cmd, '\'') == NULL
 		&& ft_strchr(cmd, ' '))
 		data->argv = ft_split(cmd, ' ');
 	else if (ft_strchr(cmd, ' '))
@@ -23,9 +23,9 @@ int	create_command(char *cmd, t_data *data)
 	{
 		data->argv = ft_calloc(2, sizeof(char *));
 		data->argv[0] = ft_strdup(cmd);
-	}
-	if (ft_strncmp(data->argv[0], "cd", ft_strlen(data->argv[0])) == 0
-		&& (ft_strncmp(data->argv[0], "cd", 2) == 0))
+	}*/
+	data->argv = split_with_comma(cmd, ' ', data);
+	if (ft_strlen(data->argv[0]) == 2 && !ft_strncmp(data->argv[0], "cd", 2))
 	{
 		data->cmd_with_path = ft_strdup(data->argv[0]);
 		return (1);
@@ -65,7 +65,6 @@ char	*create_string(int count, char c, int len, t_data *data)
 	{
 		str[len] = 0;
 		str = ft_memset(str, c, len);
-		data->special_char_check[count] = str;
 	}
 	else
 		error(data, "malloc for check special characters failed", 1);
