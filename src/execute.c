@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 21:32:04 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 21:49:49 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,21 +46,23 @@ void	execute_fork(char *cmd, t_data *data, int cmd_nb, int end)
 int	is_builtin(char *cmd, t_data *data)
 {
 	int		ret;
+	char	*arg;
 
+	arg = data->argv[0];
 	ret = 1;
-	if (ft_strlen(cmd) == 4 && !ft_strncmp(cmd, "echo", ft_strlen(cmd)))
+	if (ft_strlen(arg) == 4 && !ft_strncmp(arg, "echo", ft_strlen(arg)))
 		ret = 1;
-	else if (ft_strlen(cmd) == 2 && !ft_strncmp(cmd, "cd", ft_strlen(cmd)))
+	else if (ft_strlen(arg) == 2 && !ft_strncmp(arg, "cd", ft_strlen(arg)))
 		change_directory(data);
-	else if (ft_strlen(cmd) == 3 && !ft_strncmp(cmd, "pwd", ft_strlen(cmd)))
+	else if (ft_strlen(arg) == 3 && !ft_strncmp(arg, "pwd", ft_strlen(arg)))
 		ret = 1;
-	else if (ft_strlen(cmd) == 6 && !ft_strncmp(cmd, "export", ft_strlen(cmd)))
+	else if (ft_strlen(arg) == 6 && !ft_strncmp(arg, "export", ft_strlen(arg)))
 		ret = 1;
-	else if (ft_strlen(cmd) == 5 && !ft_strncmp(cmd, "unset", ft_strlen(cmd)))
+	else if (ft_strlen(arg) == 5 && !ft_strncmp(arg, "unset", ft_strlen(arg)))
 		ret = 1;
-	else if (ft_strlen(cmd) == 3 && !ft_strncmp(cmd, "env", ft_strlen(cmd)))
+	else if (ft_strlen(arg) == 3 && !ft_strncmp(arg, "env", ft_strlen(arg)))
 		ret = 1;
-	else if (ft_strlen(cmd) == 4 && !ft_strncmp(cmd, "exit", ft_strlen(cmd)))
+	else if (ft_strlen(arg) == 4 && !ft_strncmp(arg, "exit", ft_strlen(arg)))
 		ret = 1;
 	else
 		ret = 0;
@@ -69,11 +71,11 @@ int	is_builtin(char *cmd, t_data *data)
 
 void	execute_command(char *cmd, t_data *data, int cmd_nb, int end)
 {
+	data->argv = split_with_comma(cmd, ' ', data);
 	if (is_builtin(cmd, data))
 		return ;
 	else
 	{
-		data->argv = split_with_comma(cmd, ' ', data);
 		if (!check_path(cmd, data))
 			execute_fork(cmd, data, cmd_nb, end);
 		if (data->cmd_with_path)
