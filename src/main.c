@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 17:21:46 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 18:23:12 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,14 @@ void	initialize(t_data *data, char **environ)
 	printf("---------------------------------------------\n\n");
 	data->line = NULL;
 	data->cmd = NULL;
+	data->cmd_with_path = NULL;
+	data->argv = NULL;
 	data->envp = create_envp(environ, data);
 	ft_bzero(data->path, PATH_MAX);
 	data->prev_dir = ft_strdup(data->path);
 	data->not_valid = 0;
 	data->pipe_nb = 0;
+	// signal_init();
 }
 
 void	destroy(t_data *data)
@@ -78,7 +81,7 @@ int	main(void)
 		if (*(data.cmd + 1))
 			execute_pipe(&data);
 		else
-			execute_command(&data);
+			execute_command(data.cmd[0], &data, -1, 1);
 		destroy(&data);
 	}
 	free_split(data.envp);
