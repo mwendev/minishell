@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 17:21:46 by aignacz          ###   ########.fr       */
+/*   Updated: 2021/12/19 18:15:32 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	initialize(t_data *data, char **environ)
 	printf("---------------------------------------------\n\n");
 	data->line = NULL;
 	data->cmd = NULL;
+	data->cmd_with_path = NULL;
 	data->envp = create_envp(environ, data);
 	ft_bzero(data->path, PATH_MAX);
 	data->prev_dir = ft_strdup(data->path);
@@ -75,9 +76,9 @@ int	main(void)
 		getcwd(data.path, PATH_MAX);
 		read_command_line(&data);
 		data.cmd = split_with_comma(data.line, '|', &data);
-		if (*(data.cmd + 1))
+		if (*(data.cmd) && *(data.cmd + 1))
 			execute_pipe(&data);
-		else
+		else if (*(data.cmd))
 			execute_command(&data);
 		destroy(&data);
 	}
