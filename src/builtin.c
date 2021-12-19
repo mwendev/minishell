@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:16 by aignacz           #+#    #+#             */
-/*   Updated: 2021/12/19 22:20:05 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/19 22:43:25 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ void	change_directory(t_data *data)
 			printf("cd: no such file or directory: %s\n", dir);
 		else
 		{
-			free(data->prev_dir);
-			data->prev_dir = ft_strdup(data->path);
+			ft_strlcpy(data->prev_dir, data->path, PATH_MAX);
 			getcwd(data->path, PATH_MAX);
 		}
 		free(dir);

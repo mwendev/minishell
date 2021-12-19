@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 22:22:36 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/19 22:43:08 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	initialize(t_data *data, char **environ)
 	data->envp_len = check_envplen(environ);
 	data->envp = create_envp(environ, data, NULL);
 	ft_bzero(data->path, PATH_MAX);
-	data->prev_dir = ft_strdup(data->path);
+	ft_bzero(data->prev_dir, PATH_MAX);
 	data->not_valid = 0;
 	data->pipe_nb = 0;
 	//signal_init();
@@ -48,7 +48,6 @@ void	destroy(t_data *data)
 void	free_at_end(t_data *data)
 {
 	free_split(data->envp);
-	free(data->prev_dir);
 }
 
 void	read_command_line(t_data *data)

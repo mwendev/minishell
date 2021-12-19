@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 22:31:49 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/19 22:47:44 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,19 @@ void	execute_command(char *cmd, t_data *data, int cmd_nb, int end)
 {
 	data->argv = split_with_comma(cmd, ' ', data);
 	if (is_builtin(data->argv[0], data))
+	{
+		free_split(data->argv);
 		return ;
+	}
 	else
 	{
 		if (!check_path(cmd, data))
 			execute_fork(cmd, data, cmd_nb, end);
 		if (data->cmd_with_path)
 			free(data->cmd_with_path);
-		free_split(data->argv);
 		waitpid(-1, NULL, 0);
 	}
+	free_split(data->argv);
 }
 
 void	execute_pipe(t_data *data)

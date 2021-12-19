@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 22:23:44 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/19 22:42:58 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ typedef struct s_data
 	char	**envp;
 	char	*line;
 	char	**cmd;
-	char	*prev_dir;
 	char	path[PATH_MAX];
+	char	prev_dir[PATH_MAX];
 }	t_data;
 
 void	change_directory(t_data *data);
