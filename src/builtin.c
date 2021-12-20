@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:16 by aignacz           #+#    #+#             */
-/*   Updated: 2021/12/20 12:35:23 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/20 15:39:38 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,9 @@ void	change_env(t_data *data, int cmd, char *target)
 	i = -1;
 	if (cmd)
 	{
-		if (!has_target(old, target) && cmd == 2)
+		if (!has_target(old, target) && cmd == 2
+			|| !ft_strchr(target, '=') && cmd == 1)
 			return ;
-		if (!ft_strchr(target, '='))
-		{
-			printf("export: `=': not a valid identifier");
-			data->exit_status = 1;
-			return ;
-		}
 		dup = ft_strdup(target);
 		target = trim_target(target);
 		if (has_target(old, target) && cmd == 2)

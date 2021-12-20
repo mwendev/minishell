@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/20 14:13:31 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/20 14:59:03 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 typedef struct s_data
 {
 	int		not_valid;
+	int		end;
 	int		pipe_nb;
 	int		*pipe_fd;
 	int		envp_len;

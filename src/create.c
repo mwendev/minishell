@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/20 12:31:09 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/20 15:42:19 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	**create_envp(char **envp, t_data *data, char *target)
 				dup[++j] = ft_strdup(envp[i]);
 	}
 	else
-		error(data, "malloc for envp failed", 1);
+		error(data, "Malloc for envp failed", 1);
 	return (dup);
 }
 
@@ -41,15 +41,14 @@ char	*create_echo_arg(char *str, t_data *data)
 	ret = NULL;
 	if (data->echo_quote == 1)
 		return (str);
-	else
-		ret = has_target(data->envp, str + 1);
-		if (!ret)
-		{
-			if (ft_strnstr(str, "$?", ft_strlen(str)))
-				return (ft_itoa(data->exit_status));
-			else
-				return ("");
-		}
+	ret = has_target(data->envp, str + 1);
+	if (!ret)
+	{
+		if (ft_strnstr(str, "$?", ft_strlen(str)))
+			return (ft_itoa(data->exit_status));
 		else
-			return (ret + ft_strlen(str));
+			return ("");
+	}
+	else
+		return (ret + ft_strlen(str));
 }
