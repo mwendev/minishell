@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/20 00:35:48 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/20 12:31:09 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,12 @@ char	*create_echo_arg(char *str, t_data *data)
 	else
 		ret = has_target(data->envp, str + 1);
 		if (!ret)
-			return ("");
+		{
+			if (ft_strnstr(str, "$?", ft_strlen(str)))
+				return (ft_itoa(data->exit_status));
+			else
+				return ("");
+		}
 		else
 			return (ret + ft_strlen(str));
 }

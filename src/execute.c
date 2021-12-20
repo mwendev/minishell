@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/20 00:28:56 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/20 14:43:49 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	execute_fd(int cmd_nb, t_data *data, int end)
 	}
 }
 
-void	execute_fork(char *cmd, t_data *data, int cmd_nb, int end)
+void	execute_fork(t_data *data, int cmd_nb, int end)
 {
 	pid_t	pid;
 
@@ -54,6 +54,7 @@ int	is_builtin(char *arg, t_data *data)
 			printf("%s", create_echo_arg(data->argv[2], data));
 		else
 			printf("%s\n", create_echo_arg(data->argv[1], data));
+		data->exit_status = 0;
 	}
 	else if (ft_strlen(arg) == 2 && !ft_strncmp(arg, "cd", ft_strlen(arg)))
 		change_directory(data);
@@ -79,10 +80,12 @@ void	execute_command(char *cmd, t_data *data, int cmd_nb, int end)
 		data->argv = split_with_comma(cmd, ' ', data);
 		if (!is_builtin(data->argv[0], data))
 		{
-			if (!check_path(cmd, data))
-				execute_fork(cmd, data, cmd_nb, end);
+			if (!check_path(data))
+				execute_fork(data, cmd_nb, end);
 			if (data->cmd_with_path)
 				free(data->cmd_with_path);
+			if (cmd_nb >= 1)
+				close_pipe(cmd_nb, data);
 			waitpid(-1, NULL, 0);
 		}
 		free_split(data->argv);
@@ -91,15 +94,13 @@ void	execute_command(char *cmd, t_data *data, int cmd_nb, int end)
 
 void	execute_pipe(t_data *data)
 {
-	char	**pipe_cmd;
-	int		i;
+	int	i;
 
 	data->pipe_fd = malloc(data->pipe_nb * 2 * sizeof(int));
-	pipe_cmd = data->cmd;
 	i = -1;
-	while (pipe_cmd[++i])
+	while (data->cmd[++i])
 	{
-		if (pipe_cmd[i + 1])
+		if (data->cmd[i + 1])
 		{
 			if (pipe(data->pipe_fd + i * 2) == -1)
 			{
@@ -107,13 +108,10 @@ void	execute_pipe(t_data *data)
 				return (error(data, "pipe failed", 0));
 			}
 			else
-				execute_command(pipe_cmd[i], data, i, 0);
+				execute_command(data->cmd[i], data, i, 0);
 		}
 		else
-			execute_command(pipe_cmd[i], data, i, 1);
-		if (i >= 1)
-			close_pipe(i, data);
-		waitpid(-1, NULL, 0);
+			execute_command(data->cmd[i], data, i, 1);
 	}
 	free(data->pipe_fd);
 }

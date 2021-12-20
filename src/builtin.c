@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:16 by aignacz           #+#    #+#             */
-/*   Updated: 2021/12/20 00:23:43 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/20 12:35:23 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,18 @@ void	change_directory(t_data *data)
 	while (data->argv[i] != NULL)
 		i++;
 	if (i > 2)
+	{
+		data->exit_status = 1;
 		printf("cd: too many arguments\n");
+	}
 	else
 	{
 		dir = get_dir_name(data);
 		if (chdir(dir) == -1)
+		{
+			data->exit_status = 1;
 			printf("cd: no such file or directory: %s\n", dir);
+		}
 		else
 		{
 			ft_strlcpy(data->prev_dir, data->path, PATH_MAX);
@@ -96,6 +102,12 @@ void	change_env(t_data *data, int cmd, char *target)
 	{
 		if (!has_target(old, target) && cmd == 2)
 			return ;
+		if (!ft_strchr(target, '='))
+		{
+			printf("export: `=': not a valid identifier");
+			data->exit_status = 1;
+			return ;
+		}
 		dup = ft_strdup(target);
 		target = trim_target(target);
 		if (has_target(old, target) && cmd == 2)

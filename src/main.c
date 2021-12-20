@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/20 00:06:25 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/20 12:14:20 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	initialize(t_data *data, char **environ)
 	data->not_valid = 0;
 	data->pipe_nb = 0;
 	data->echo_quote = 0;
+	data->exit_status = 0;
 	//signal_init();
 }
 

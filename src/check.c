@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/19 22:23:07 by mwen             ###   ########.fr       */
+/*   Updated: 2021/12/20 14:13:18 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,6 @@ int	check_envplen(char **envp)
 	while (envp[len])
 		len++;
 	return (len);
-}
-
-int	check_pipe_nb(char *cmd, t_data *data)
-{
-	char	**pipe_cmd;
-	int		i;
-
-	i = -1;
-	pipe_cmd = ft_split(cmd, '|');
-	while (pipe_cmd[++i])
-		continue ;
-	data->pipe_nb = i - 1;
-	free_split(pipe_cmd);
-	if (data->pipe_nb > 0)
-		return (1);
-	else
-		return (0);
 }
 
 char	*check_path_in_env(char **envp, t_data *data)
@@ -85,7 +68,7 @@ int	check_full_path(char *env_paths, char **split, t_data *data)
 	return (0);
 }
 
-int	check_path(char *cmd, t_data *data)
+int	check_path(t_data *data)
 {
 	char	*env_paths;
 	char	**split;
@@ -105,6 +88,7 @@ int	check_path(char *cmd, t_data *data)
 	{
 		free_split(split);
 		data->not_valid = 1;
+		data->exit_status = 127;
 		return (printf("%s: command not found\n", data->argv[0]));
 	}
 }
