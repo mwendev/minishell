@@ -4,3 +4,6 @@ echo with more than 2 args
 • $? should expand to the exit status of the most recently executed foreground
 pipeline
 • Environment variables ($ followed by characters) should expand to their values.
+
+check:
+<to-do uniq -c >abc by chance seg fault

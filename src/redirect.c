@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 14:19:11 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/04 19:42:32 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/04 23:01:00 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,51 +19,50 @@ void	write_stdin(t_data *data, int fd)
 	char	*eof;
 
 	i = 0;
-	eof = data->redir_append[0];
-	fd = open("_tmp", O_RDWR | O_CREAT);
+	eof = data->redir_stdin[0];
+	fd = open("_tmp", O_RDWR | O_CREAT | O_CLOEXEC, 0777);
 	if (fd != -1)
 	{
-		while (get_next_line(STDIN_FILENO, line) != 0
-		&& ft_strncmp(*line, eof, ft_strlen(eof)) != 0)
+		while (get_next_line(STDIN_FILENO, line)
+		&& ft_strncmp(*line, eof, ft_strlen(eof)))
 		{
 			if (write(fd, *line, ft_strlen(*line)) == -1
 				|| write(fd, "\n", 1) == -1)
-				return (error(data, "Write failed", 0, 'e'));
+				return (error(data, "Write failed", 1, 'e'));
 			free(*line);
 			if (++i == 2048)
-			{
-				error(data, "Max 2048 lines\n", 0, 'p');
-				return ;
-			}
+				return (error(data, "Max 2048 lines\n", 0, 'p'));
 		}
 		free(*line);
 	}
 	else
-		error(data, "Open failed", 0, 'e');
+		error(data, "Open failed", 1, 'e');
 }
 
 void	redir_fd(t_data *data, int fd, int redir_type)
 {
 		if (redir_type == 1)
-			write_stdin(data, fd);
+		{
+			close(0);
+			fd = open("_tmp", O_RDONLY, 0644);
+		}
 		else if (redir_type == 2)
 		{
-			fd = open(data->redir_from[0], O_RDONLY | O_CLOEXEC, 0644);
-			if (fd == -1)
-				error(data, "Open failed", 1, 'e');
+			close(0);
+			fd = open(data->redir_from[0], O_RDONLY, 0644);
 		}
-		if (redir_type <= 2 && dup2(fd, STDIN_FILENO) < 0)
-			return (error(data, "Dup failed", 1, 'e'));
 		if (redir_type == 3)
-			fd = open(data->redir_append[0], O_RDWR | O_CREAT | O_APPEND
-				| O_CLOEXEC, 0777);
+		{
+			close(1);
+			fd = open(data->redir_append[0], O_RDWR | O_CREAT | O_APPEND, 0777);
+		}
 		else if (redir_type == 4)
-			fd = open(data->redir_to[0], O_RDWR | O_CREAT | O_TRUNC
-				| O_CLOEXEC, 0777);
-		if (redir_type > 2 && fd == -1)
+		{
+			close(1);
+			fd = open(data->redir_to[0], O_RDWR | O_CREAT | O_TRUNC, 0777);
+		}
+		if (fd == -1)
 			error(data, "Open failed", 1, 'e');
-		if (redir_type > 2 && dup2(fd, STDOUT_FILENO) < 0)
-			return (error(data, "Dup failed", 1, 'e'));
 }
 
 void	trim_line(t_data *data, char *to_trim)
@@ -124,15 +123,18 @@ char	**get_redir(t_data *data, char c)
 	ret[1] = ft_calloc(len + 1, 1);
 	ft_strlcpy(ret[1], data->line + start, i - start + len + 1);
 	trim_line(data, ret[1]);
-	printf("|%s| |%s| |%s|\n", ret[0], ret[1], data->line);
+	// printf("|%s| |%s| |%s|\n", ret[0], ret[1], data->line);
 	return (ret);
 }
 
-/*by chance < to-do ls >> abc seg fault*/
 void	redirect(t_data *data)
 {
 	if (ft_strnstr(data->line, "<<", ft_strlen(data->line)))
+	{
 		data->redir_stdin = get_redir(data, '<');
+		write_stdin(data, data->redir_stdin_fd);
+		close(data->redir_stdin_fd);
+	}
 	else if	(ft_strchr(data->line, '<'))
 		data->redir_from = get_redir(data, '<');
 	if (ft_strnstr(data->line, ">>", ft_strlen(data->line)))

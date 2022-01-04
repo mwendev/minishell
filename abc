@@ -1,0 +1,9 @@
+   1 echo with more than 2 args
+   1 • ’ inhibit all interpretation of a sequence of characters.
+   1 • " inhibit all interpretation of a sequence of characters except for $.
+   1 • $? should expand to the exit status of the most recently executed foreground
+   1 pipeline
+   1 • Environment variables ($ followed by characters) should expand to their values.
+   1 
+   1 check:
+   1 <to-do uniq -c >abc by chance seg fault
