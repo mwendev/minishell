@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/20 15:42:19 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/03 11:30:51 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	**create_envp(char **envp, t_data *data, char *target)
 				dup[++j] = ft_strdup(envp[i]);
 	}
 	else
-		error(data, "Malloc for envp failed", 1);
+		error(data, "Malloc for envp failed", 1, 'e');
 	return (dup);
 }
 

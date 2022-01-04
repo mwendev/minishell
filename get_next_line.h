@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/15 11:50:51 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/04 17:35:45 by mwen             ###   ########.fr       */
+/*   Created: 2021/05/22 00:35:50 by mwen              #+#    #+#             */
+/*   Updated: 2022/01/04 11:23:30 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef GET_NEXT_LINE_H
 
-char	*ft_strchr(const char *s, int c)
-{
-	if (!c)
-		return (NULL);
-	while (*s)
-	{
-		if (*(char *)s == c)
-			return ((char *)s);
-		s++;
-	}
-	if (*(char *)s == c)
-		return ((char *)s);
-	return (NULL);
-}
+# define GET_NEXT_LINE_H
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+
+#define BUFFER_SIZE 42
+
+int			get_next_line(int fd, char **line);
+char		*ft_strjoinn(char *s1, char *s2);
+long long	ft_strlenn(char *str);
+
+#endif

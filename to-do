@@ -1,10 +1,6 @@
-Need to add:
-	cd ../ ls not error
-	ls | cd ../ two prompts
-	echo
-	env export/unset
-
-Need to fix:
-fix ctrl+D segmentation fault
-cmd free(i removed the old free bc it give seg fault when ls | abc, now im not sure if it's properly freed)
-
+echo with more than 2 args
+• ’ inhibit all interpretation of a sequence of characters.
+• " inhibit all interpretation of a sequence of characters except for $.
+• $? should expand to the exit status of the most recently executed foreground
+pipeline
+• Environment variables ($ followed by characters) should expand to their values.

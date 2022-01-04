@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/12 18:28:00 by mwen              #+#    #+#             */
-/*   Updated: 2021/05/17 03:18:44 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/04 19:44:32 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,21 @@
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	size_t	len;
-	char	*x;
+	size_t	i;
+	size_t	k;
 
-	if (!s1)
-		return (NULL);
-	while (ft_strchr(set, *s1) && *s1)
-		s1++;
-	if (*s1 == '\0')
-		return (ft_strdup(""));
-	len = ft_strlen(s1);
-	while (ft_strchr(set, s1[len - 1]))
-		len--;
-	x = ft_substr(s1, 0, len);
-	return (x);
+	if (!s1 || !set)
+		return (0);
+	i = ft_strlen((char *)s1);
+	--i;
+	k = 0;
+	while (i && ft_strchr(set, s1[i]) && (ft_strchr(set, s1[i + 1])
+		|| ft_strchr(set, s1[i - 1])))
+		i--;
+	while (s1[k] && ft_strchr(set, s1[k]) && (ft_strchr(set, s1[k + 1])
+		|| ft_strchr(set, s1[k - 1])))
+		k++;
+	if (k > i)
+		return (ft_substr(s1, 0, 0));
+	return (ft_substr(s1, k, i - k + 1));
 }

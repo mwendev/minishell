@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/20 15:50:23 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/04 16:55:25 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,28 @@ void	execute_fd(int cmd_nb, t_data *data, int end)
 	if (cmd_nb > 0)
 	{
 		if (dup2(data->pipe_fd[(cmd_nb - 1) * 2], STDIN_FILENO) < 0)
-			return (error(data, "Dup failed", 0));
+			return (error(data, "Dup failed", 1, 'e'));
 		close(data->pipe_fd[(cmd_nb - 1) * 2 + 1]);
+	}
+	else
+	{
+		if (data->redir_stdin)
+			redir_fd(data, data->redir_stdin_fd, 1);
+		else if (data->redir_from)
+			redir_fd(data, data->redir_from_fd, 2);
 	}
 	if (!end)
 	{
 		if (dup2(data->pipe_fd[cmd_nb * 2 + 1], STDOUT_FILENO) < 0)
-			return (error(data, "Dup failed", 0));
+			return (error(data, "Dup failed", 1, 'e'));
 		close(data->pipe_fd[cmd_nb * 2]);
+	}
+	else
+	{
+		if (data->redir_append)
+			redir_fd(data, data->redir_append_fd, 3);
+		else if (data->redir_to)
+			redir_fd(data, data->redir_to_fd, 4);
 	}
 }
 
@@ -34,12 +48,12 @@ void	execute_fork(t_data *data, int cmd_nb, int end)
 
 	pid = fork();
 	if (pid < 0)
-		return (error(data, "Fork failed", 0));
+		return (error(data, "Fork failed", 1, 'e'));
 	else if (!pid)
 	{
 		execute_fd(cmd_nb, data, end);
 		if (execve(data->cmd_with_path, data->argv, data->envp) < 0)
-			error(data, "Exec failed", 0);
+			error(data, "Exec failed", 1, 'e');
 	}
 }
 
@@ -84,18 +98,15 @@ void	execute_command(char *cmd, t_data *data, int cmd_nb, int end)
 	if (!data->not_valid)
 	{
 		data->argv = split_with_comma(cmd, ' ', data);
-		if (!is_builtin(data->argv[0], data))
+		if (!is_builtin(data->argv[0], data) && !check_path(data))
 		{
-			if (!check_path(data))
-			{
-				execute_fork(data, cmd_nb, end);
-				if (data->cmd_with_path)
-					free(data->cmd_with_path);
-				if (cmd_nb >= 1)
-					close_pipe(cmd_nb, data);
-				waitpid(-1, &status, 0);
-				data->exit_status = WEXITSTATUS(status);
-			}
+			execute_fork(data, cmd_nb, end);
+			if (data->cmd_with_path)
+				free(data->cmd_with_path);
+			if (cmd_nb >= 1)
+				close_pipe(cmd_nb, data);
+			waitpid(-1, &status, 0);
+			data->exit_status = WEXITSTATUS(status);
 		}
 		free_split(data->argv);
 	}
@@ -116,7 +127,7 @@ void	execute_pipe(t_data *data)
 				if (pipe(data->pipe_fd + i * 2) == -1)
 				{
 					free(data->pipe_fd);
-					return (error(data, "Pipe failed", 0));
+					return (error(data, "Pipe failed", 1, 'e'));
 				}
 				else
 					execute_command(data->cmd[i], data, i, 0);
@@ -127,5 +138,5 @@ void	execute_pipe(t_data *data)
 		free(data->pipe_fd);
 	}
 	else
-		error(data, "Malloc for pipe_fd failed", 1);
+		error(data, "Malloc for pipe_fd failed", 1, 'e');
 }

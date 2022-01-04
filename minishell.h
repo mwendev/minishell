@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/20 14:59:03 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/04 15:24:32 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
+# include "get_next_line.h"
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -22,6 +23,7 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <fcntl.h>
 
 # ifdef __linux__
 #  include <limits.h>
@@ -38,6 +40,14 @@ typedef struct s_data
 	int		envp_len;
 	int		echo_quote;
 	int		exit_status;
+	int		redir_from_fd;
+	int		redir_stdin_fd;
+	int		redir_to_fd;
+	int		redir_append_fd;
+	char	**redir_from;
+	char	**redir_stdin;
+	char	**redir_to;
+	char	**redir_append;
 	char	*cmd_with_path;
 	char	**argv;
 	char	**envp;
@@ -52,16 +62,20 @@ int		check_path(t_data *data);
 int		check_line(t_data *data);
 int		check_envplen(char **envp);
 char	**create_envp(char **envp, t_data *data, char *target);
+void	destroy_redir(t_data *data);
+void	destroy(t_data *data);
 char	**split_with_comma(char *line, char c, t_data *data);
 void	execute_command(char *cmd, t_data *data, int cmd_nb, int end);
 void	execute_pipe(t_data *data);
 void	change_env(t_data *data, int cmd, char *target);
-void	error(t_data *data, char *str, int end);
+void	error(t_data *data, char *str, int end, char type);
 int		free_split(char **str);
 void	free_pipe(char **pipe_cmd, t_data *data);
 void	close_pipe(int piped, t_data *data);
 void	signal_init(void);
 char	*has_target(char **envp, char *target);
 char	*create_echo_arg(char *str, t_data *data);
+void	redirect(t_data *data);
+void	redir_fd(t_data *data, int fd, int redir_type);
 
 #endif

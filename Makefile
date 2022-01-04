@@ -3,21 +3,22 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+         #
+#    By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/11 13:50:28 by mwen              #+#    #+#              #
-#    Updated: 2021/12/19 18:47:20 by aignacz          ###   ########.fr        #
+#    Updated: 2022/01/04 12:57:00 by mwen             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			=	minishell
 CC				=	clang
-CFLAGS			=	-Wall -Wextra -Werror -g
+CFLAGS			=	-Wall -Wextra -Werror -g 
 RM				=	rm -rf
 INCLUDE			=	libft/libft.h minishell.h
 
 SRCS_LIST		=	main.c builtin.c error.c check.c execute.c input_split.c\
-					create.c signal.c
+					create.c signal.c redirect.c get_next_line.c \
+					get_next_line_utils.c
 SRCS_DIR		=	src/
 SRCS			=	${addprefix ${SRCS_DIR}, ${SRCS}}
 

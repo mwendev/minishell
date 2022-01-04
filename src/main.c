@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2021/12/20 15:12:20 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/04 19:40:25 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,10 @@ void	initialize(t_data *data, char **environ)
 	data->envp = create_envp(environ, data, NULL);
 	ft_bzero(data->path, PATH_MAX);
 	ft_bzero(data->prev_dir, PATH_MAX);
+	data->redir_append = NULL;
+	data->redir_from = NULL;
+	data->redir_stdin = NULL;
+	data->redir_to = NULL;
 	data->not_valid = 0;
 	data->pipe_nb = 0;
 	data->echo_quote = 0;
@@ -45,6 +49,7 @@ void	destroy(t_data *data)
 		free(data->line);
 		data->line = NULL;
 	}
+	destroy_redir(data);
 	data->not_valid = 0;
 }
 
@@ -79,6 +84,7 @@ int	main(void)
 	{
 		getcwd(data.path, PATH_MAX);
 		read_command_line(&data);
+		redirect(&data);
 		data.cmd = split_with_comma(data.line, '|', &data);
 		if (*(data.cmd) && *(data.cmd + 1))
 			execute_pipe(&data);
