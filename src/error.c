@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/04 22:56:04 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 20:48:52 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	error(t_data *data, char *str, int end, char type)
 {
-	if (type == 'e')
+	if (str && type == 'e')
 		perror(str);
-	else if (type == 'p')
+	else if (str && type == 'p')
 		printf("%s", str);
 	data->not_valid = 1;
 	if (end)

@@ -6,32 +6,11 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:16 by aignacz           #+#    #+#             */
-/*   Updated: 2021/12/29 13:19:25 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 21:02:31 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-char	*get_dir_name(t_data *data)
-{
-	char	*dir;
-	char	*temp;
-
-	if (data->argv[1] == NULL)
-		dir = ft_strdup(getenv("HOME"));
-	else if (data->argv[1][0] == '~')
-	{
-		temp = ft_substr(data->argv[1], 1, ft_strlen(data->argv[1]) - 1);
-		dir = ft_strjoin(getenv("HOME"), temp);
-		free(temp);
-	}
-	else if (ft_strlen(data->argv[1]) == 1
-		&& ft_strncmp(data->argv[1], "-", 1) == 0)
-		dir = ft_strdup(data->prev_dir);
-	else
-		dir = ft_strdup(data->argv[1]);
-	return (dir);
-}
 
 void	change_directory(t_data *data)
 {
@@ -63,31 +42,18 @@ void	change_directory(t_data *data)
 	}
 }
 
-char	*has_target(char **envp, char *target)
+void	print_echo(t_data *data)
 {
-	char	*ret;
-	int		i;
+	int	i;
 
-	i = -1;
-	ret = NULL;
-	while (envp[++i])
-	{
-		ret = ft_strnstr(envp[i], target, ft_strlen(envp[i]));
-		if (ret)
-			return (ret);
-	}
-	return (ret);
-}
-
-char	*trim_target(char *target)
-{
-	char	*ret;
-	char	**split;
-
-	split = ft_split(target, '=');
-	ret = ft_strdup(split[0]);
-	free_split(split);
-	return (ret);
+	if (!ft_strncmp(data->argv[1], "-n", ft_strlen(data->argv[1])))
+		i = 1;
+	else
+		i = 0;
+	while (data->argv[++i])
+		printf("%s ", data->argv[i]);
+	printf("\n");
+	data->exit_status = 0;
 }
 
 void	change_env(t_data *data, int cmd, char *target)

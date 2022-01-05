@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/04 15:24:32 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 21:12:05 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@
 typedef struct s_data
 {
 	int		not_valid;
-	int		end;
 	int		pipe_nb;
 	int		*pipe_fd;
 	int		envp_len;
@@ -57,25 +56,42 @@ typedef struct s_data
 	char	prev_dir[PATH_MAX];
 }	t_data;
 
-void	change_directory(t_data *data);
+/* main.c */
+char	**create_envp(char **envp, t_data *data, char *target);
+char	**split_input(char *line, char c, t_data *data);
+void	destroy(t_data *data);
+
+/* signal.c*/
+void	signal_init(void);
+
+/* check.c */
 int		check_path(t_data *data);
 int		check_line(t_data *data);
 int		check_envplen(char **envp);
-char	**create_envp(char **envp, t_data *data, char *target);
-void	destroy_redir(t_data *data);
-void	destroy(t_data *data);
-char	**split_with_comma(char *line, char c, t_data *data);
+
+/* execute.c */
 void	execute_command(char *cmd, t_data *data, int cmd_nb, int end);
 void	execute_pipe(t_data *data);
+
+/* builtin.c */
 void	change_env(t_data *data, int cmd, char *target);
+void	change_directory(t_data *data);
+void	print_echo(t_data *data);
+
+/* builtin_utils.c */
+char	*has_target(char **envp, char *target);
+char	*trim_target(char *target);
+char	*get_dir_name(t_data *data);
+
+/* redirect.c */
+void	redirect(t_data *data);
+void	redir_fd(t_data *data, int fd, int redir_type);
+
+/* error.c */
 void	error(t_data *data, char *str, int end, char type);
 int		free_split(char **str);
 void	free_pipe(char **pipe_cmd, t_data *data);
 void	close_pipe(int piped, t_data *data);
-void	signal_init(void);
-char	*has_target(char **envp, char *target);
-char	*create_echo_arg(char *str, t_data *data);
-void	redirect(t_data *data);
-void	redir_fd(t_data *data, int fd, int redir_type);
+void	destroy_redir(t_data *data);
 
 #endif

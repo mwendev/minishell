@@ -5,5 +5,9 @@ echo with more than 2 args
 pipeline
 • Environment variables ($ followed by characters) should expand to their values.
 
+<< seg fault
+trim_line too long
+builtin not working
+
 check:
 <to-do uniq -c >abc by chance seg fault

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   input_split.c                                      :+:      :+:    :+:   */
+/*   split_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 20:20:13 by aignacz           #+#    #+#             */
-/*   Updated: 2021/12/19 20:08:25 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/05 21:15:06 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ char	*get_next_word(char **pointer_place)
 	return (ft_substr(pointer, start, len));
 }
 
-char	**split_with_comma(char *line, char c, t_data *data)
+char	**split_input(char *line, char c, t_data *data)
 {
 	int		words;
 	int		i;
@@ -142,16 +142,21 @@ char	**split_with_comma(char *line, char c, t_data *data)
 	if (c == '|')
 		data->pipe_nb = words;
 	argv = (char **) malloc((words + 1) * sizeof(char *));
-	i = 0;
-	pointer = line;
-	while (i < words)
+	if (argv)
 	{
-		if (c == '|')
-			*(argv + i) = get_next_word_col(&pointer);
-		else
-			*(argv + i) = get_next_word(&pointer);
-		i++;
+		i = 0;
+		pointer = line;
+		while (i < words)
+		{
+			if (c == '|')
+				*(argv + i) = get_next_word_col(&pointer);
+			else
+				*(argv + i) = get_next_word(&pointer);
+			i++;
+		}
+		*(argv + i) = NULL;
 	}
-	*(argv + i) = NULL;
+	else
+		error(data, "Malloc failed for input data argv\n", 0, 'p');
 	return (argv);
 }

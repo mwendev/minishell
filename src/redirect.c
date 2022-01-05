@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 14:19:11 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/04 23:01:00 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 20:50:06 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	write_stdin(t_data *data, int fd)
 
 	i = 0;
 	eof = data->redir_stdin[0];
-	fd = open("_tmp", O_RDWR | O_CREAT | O_CLOEXEC, 0777);
+	fd = open("_tmp", O_RDWR | O_CREAT, 0777);
 	if (fd != -1)
 	{
 		while (get_next_line(STDIN_FILENO, line)
@@ -75,6 +75,8 @@ void	trim_line(t_data *data, char *to_trim)
 	int		flag = 0;
 
 	temp = ft_calloc(ft_strlen(data->line), 1);
+	if (!temp)
+		error(data, "Malloc failed for new line", 0, 'p');
 	while (data->line[++i])
 	{
 		k = i;
@@ -108,27 +110,40 @@ char	**get_redir(t_data *data, char c)
 
 	i = -1;
 	len = 0;
+	if (!data->line)
+		return (NULL);
 	ret = ft_calloc(3, sizeof(char *));
 	if (!ret)
-		error(data, "Malloc fail for redirection data", 1, 'p');
+		error(data, "Malloc failed for redirection data", 0, 'p');
 	while (data->line[++i] != c)
 		continue ;
 	start = i;
 	while (data->line[i] == c || data->line[i] == ' ')
 		++i;
-	while (data->line[i + len] != ' ')
+	while (data->line[i + len] && data->line[i + len] != ' ')
 		len++;
+	if (!len)
+		return (NULL);
 	ret[0] = ft_calloc(len + 1, 1);
 	ft_strlcpy(ret[0], data->line + i, len + 1);
-	ret[1] = ft_calloc(len + 1, 1);
+	ret[1] = ft_calloc(len + i + 1, 1);
 	ft_strlcpy(ret[1], data->line + start, i - start + len + 1);
 	trim_line(data, ret[1]);
-	// printf("|%s| |%s| |%s|\n", ret[0], ret[1], data->line);
+	printf("%d %d |%s| |%s| |%s|\n", len, i, ret[0], ret[1], data->line);
 	return (ret);
 }
 
 void	redirect(t_data *data)
 {
+	if (!ft_strncmp(data->line, "<<", ft_strlen(data->line)) 
+		|| !ft_strncmp(data->line, "<", ft_strlen(data->line))
+		|| !ft_strncmp(data->line, ">>", ft_strlen(data->line))
+		|| !ft_strncmp(data->line, ">", ft_strlen(data->line)))
+		{
+			error(data, "bash: syntax error near unexpected token `newline'\n"
+				, 0, 'p');
+			return ;
+		}
 	if (ft_strnstr(data->line, "<<", ft_strlen(data->line)))
 	{
 		data->redir_stdin = get_redir(data, '<');

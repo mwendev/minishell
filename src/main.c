@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/04 23:00:37 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 21:04:01 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	initialize(t_data *data, char **environ)
 	data->pipe_nb = 0;
 	data->echo_quote = 0;
 	data->exit_status = 0;
-	data->end = 0;
 	//signal_init();
 }
 
@@ -63,6 +62,8 @@ void	read_command_line(t_data *data)
 	free(temp1);
 	if (data->line && *(data->line))
 		add_history(data->line);
+	else
+		error(data, "Read line failed, exiting...\n", 1, 'p');
 	while (check_line(data))
 	{
 		temp1 = ft_strjoin(data->line, "\n");
@@ -80,12 +81,12 @@ int	main(void)
 	extern char	**environ;
 
 	initialize(&data, environ);
-	while (!data.end)
+	while (1)
 	{
 		getcwd(data.path, PATH_MAX);
 		read_command_line(&data);
 		redirect(&data);
-		data.cmd = split_with_comma(data.line, '|', &data);
+		data.cmd = split_input(data.line, '|', &data);
 		if (*(data.cmd) && *(data.cmd + 1))
 			execute_pipe(&data);
 		else if (*(data.cmd))

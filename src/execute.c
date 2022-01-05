@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/04 20:55:06 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 21:04:18 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,7 @@ int	is_builtin(char *arg, t_data *data)
 
 	ret = 1;
 	if (ft_strlen(arg) == 4 && !ft_strncmp(arg, "echo", ft_strlen(arg)))
-	{
-		if (!ft_strncmp(data->argv[1], "-n", ft_strlen(data->argv[1])))
-			printf("%s", create_echo_arg(data->argv[2], data));
-		else
-			printf("%s\n", create_echo_arg(data->argv[1], data));
-		data->exit_status = 0;
-	}
+		print_echo(data);
 	else if (ft_strlen(arg) == 2 && !ft_strncmp(arg, "cd", ft_strlen(arg)))
 		change_directory(data);
 	else if (ft_strlen(arg) == 3 && !ft_strncmp(arg, "pwd", ft_strlen(arg)))
@@ -85,7 +79,7 @@ int	is_builtin(char *arg, t_data *data)
 	else if (ft_strlen(arg) == 3 && !ft_strncmp(arg, "env", ft_strlen(arg)))
 		change_env(data, 0, NULL);
 	else if (ft_strlen(arg) == 4 && !ft_strncmp(arg, "exit", ft_strlen(arg)))
-		data->end = 1;
+		error(data, NULL, 1, 0);
 	else
 		ret = 0;
 	return (ret);
@@ -97,7 +91,8 @@ void	execute_command(char *cmd, t_data *data, int cmd_nb, int end)
 
 	if (!data->not_valid)
 	{
-		data->argv = split_with_comma(cmd, ' ', data);
+		data->argv = split_input(cmd, ' ', data);
+		printf("|%s| |%s|\n", data->argv[0], data->argv[1]);
 		if (!is_builtin(data->argv[0], data) && !check_path(data))
 		{
 			execute_fork(data, cmd_nb, end);
