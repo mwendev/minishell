@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/05 21:04:18 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 23:40:42 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,14 @@ int	is_builtin(char *arg, t_data *data)
 		printf("%s\n", data->path);
 	else if (ft_strlen(arg) == 6 && !ft_strncmp(arg, "export", ft_strlen(arg)))
 	{
-		if (ft_strchr(data->argv[2], '='))
+		if (data->argv[2] && ft_strchr(data->argv[2], '='))
 			data->exit_status = 1;
-		change_env(data, 1, data->argv[1]);
+		change_env(data, 1);
 	}
 	else if (ft_strlen(arg) == 5 && !ft_strncmp(arg, "unset", ft_strlen(arg)))
-		change_env(data, 2, data->argv[1]);
+		change_env(data, 2);
 	else if (ft_strlen(arg) == 3 && !ft_strncmp(arg, "env", ft_strlen(arg)))
-		change_env(data, 0, NULL);
+		print_env(data);
 	else if (ft_strlen(arg) == 4 && !ft_strncmp(arg, "exit", ft_strlen(arg)))
 		error(data, NULL, 1, 0);
 	else
@@ -90,21 +90,20 @@ void	execute_command(char *cmd, t_data *data, int cmd_nb, int end)
 	int	status;
 
 	if (!data->not_valid)
-	{
 		data->argv = split_input(cmd, ' ', data);
-		printf("|%s| |%s|\n", data->argv[0], data->argv[1]);
-		if (!is_builtin(data->argv[0], data) && !check_path(data))
-		{
-			execute_fork(data, cmd_nb, end);
-			if (data->cmd_with_path)
-				free(data->cmd_with_path);
-			if (cmd_nb >= 1)
-				close_pipe(cmd_nb, data);
-			waitpid(-1, &status, 0);
-			data->exit_status = WEXITSTATUS(status);
-		}
-		free_split(data->argv);
+		// printf("|%s| |%s|\n", data->argv[0], data->argv[1]);
+	if (!data->not_valid && !is_builtin(data->argv[0], data)
+		&& !check_path(data))
+	{
+		execute_fork(data, cmd_nb, end);
+		if (data->cmd_with_path)
+			free(data->cmd_with_path);
+		if (cmd_nb >= 1)
+			close_pipe(cmd_nb, data);
+		waitpid(-1, &status, 0);
+		data->exit_status = WEXITSTATUS(status);
 	}
+	free_split(data->argv);
 }
 
 void	execute_pipe(t_data *data)

@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:16 by aignacz           #+#    #+#             */
-/*   Updated: 2022/01/05 21:02:31 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 23:52:41 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,21 +56,32 @@ void	print_echo(t_data *data)
 	data->exit_status = 0;
 }
 
-void	change_env(t_data *data, int cmd, char *target)
+void	print_env(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	while (data->envp[++i])
+		printf("%s\n", data->envp[i]);
+}
+
+void	change_env(t_data *data, int cmd)
 {
 	char	**old;
 	char	*dup;
+	char	*target;
 	int		i;
 
-	old = data->envp;
-	i = -1;
-	if (cmd)
+	i = 0;
+	while (data->argv[++i])
 	{
-		if (!has_target(old, target) && cmd == 2
-			|| !ft_strchr(target, '=') && cmd == 1)
+		old = data->envp;
+		if ((!has_target(old, data->argv[i]) && cmd == 2)
+			|| (!ft_strchr(data->argv[i], '=') && cmd == 1)
+			|| (!ft_strncmp(data->argv[i], "=", 1)))
 			return ;
-		dup = ft_strdup(target);
-		target = trim_target(target);
+		dup = ft_strdup(data->argv[i]);
+		target = trim_target(data->argv[i]);
 		if (has_target(old, target) && cmd == 2)
 			data->envp_len--;
 		else if (!has_target(old, target) && cmd == 1)
@@ -82,7 +93,4 @@ void	change_env(t_data *data, int cmd, char *target)
 		free(target);
 		free_split(old);
 	}
-	else
-		while (old[++i])
-			printf("%s\n", old[i]);
 }

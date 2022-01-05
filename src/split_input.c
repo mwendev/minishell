@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 20:20:13 by aignacz           #+#    #+#             */
-/*   Updated: 2022/01/05 21:15:06 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 23:04:20 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ char	*get_next_word_col(char **pointer_place)
 	return (new_str);
 }
 
-char	*get_next_word(char **pointer_place)
+char	*get_next_word(char **pointer_place, int *flag, t_data *data)
 {
 	char	*pointer;
 	char	ch;
@@ -115,6 +115,8 @@ char	*get_next_word(char **pointer_place)
 		start++;
 	if (*(pointer + start) == '"' || *(pointer + start) == '\'')
 	{
+		if (*(pointer + start) == '\'' && *(pointer + start + 1) == '$')
+			*flag = 0;
 		ch = *(pointer + start);
 		start++;
 	}
@@ -132,6 +134,7 @@ char	**split_input(char *line, char c, t_data *data)
 {
 	int		words;
 	int		i;
+	int		flag;
 	char	**argv;
 	char	*pointer;
 
@@ -148,10 +151,14 @@ char	**split_input(char *line, char c, t_data *data)
 		pointer = line;
 		while (i < words)
 		{
+			flag = 1;
 			if (c == '|')
 				*(argv + i) = get_next_word_col(&pointer);
 			else
-				*(argv + i) = get_next_word(&pointer);
+			{
+				*(argv + i) = get_next_word(&pointer, &flag, data);
+				*(argv + i) = create_expand(flag, *(argv + i), data);
+			}
 			i++;
 		}
 		*(argv + i) = NULL;

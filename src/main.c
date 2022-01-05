@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/05 21:04:01 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 21:41:36 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ int	main(void)
 	t_data		data;
 	extern char	**environ;
 
+	data.temp = environ;
 	initialize(&data, environ);
 	while (1)
 	{

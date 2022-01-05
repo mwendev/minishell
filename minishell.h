@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/05 21:12:05 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 23:40:12 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,29 +54,36 @@ typedef struct s_data
 	char	**cmd;
 	char	path[PATH_MAX];
 	char	prev_dir[PATH_MAX];
+
+	char	**temp;
 }	t_data;
 
 /* main.c */
-char	**create_envp(char **envp, t_data *data, char *target);
 char	**split_input(char *line, char c, t_data *data);
 void	destroy(t_data *data);
 
-/* signal.c*/
+/* create.c */
+char	**create_envp(char **envp, t_data *data, char *target);
+char	*create_expand(int	flag, char *src, t_data *data);
+
+/* signal.c */
 void	signal_init(void);
 
 /* check.c */
 int		check_path(t_data *data);
 int		check_line(t_data *data);
 int		check_envplen(char **envp);
+char	*check_in_env(char **envp, char *to_check, t_data *data);
 
 /* execute.c */
 void	execute_command(char *cmd, t_data *data, int cmd_nb, int end);
 void	execute_pipe(t_data *data);
 
 /* builtin.c */
-void	change_env(t_data *data, int cmd, char *target);
+void	change_env(t_data *data, int cmd);
 void	change_directory(t_data *data);
 void	print_echo(t_data *data);
+void	print_env(t_data *data);
 
 /* builtin_utils.c */
 char	*has_target(char **envp, char *target);

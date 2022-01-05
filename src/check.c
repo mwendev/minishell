@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/03 11:30:14 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 22:40:29 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,26 @@ int	check_envplen(char **envp)
 	return (len);
 }
 
-char	*check_path_in_env(char **envp, t_data *data)
+char	*check_in_env(char **envp, char *to_check, t_data *data)
 {
 	int		i;
-	char	*path;
+	int		j;
+	char	*expanded_value;
 
 	i = -1;
+	j = -1;
 	while (envp[++i])
 	{
-		if (ft_strnstr(envp[i], "PATH", ft_strlen(envp[i])))
+		if (ft_strnstr(envp[i], to_check, ft_strlen(to_check)))
 		{
-			path = envp[i] + 5;
-			return (path);
+			while (envp[i][j] != '=')
+				++j;
+			expanded_value = envp[i] + j + 1;
+			return (expanded_value);
 		}
 	}
-	error(data, "No path found in env", 0, 'p');
+	printf("%s: ", to_check);
+	error(data, "not found in env", 0, 'p');
 	return (NULL);
 }
 
@@ -75,10 +80,10 @@ int	check_path(t_data *data)
 	int		i;
 
 	i = -1;
-	env_paths = check_path_in_env(data->envp, data);
+	env_paths = check_in_env(data->envp, "PATH", data);
 	if (!env_paths)
 	{
-		error(data, "no env path found", 0, 'p');
+		error(data, "No env path found", 0, 'p');
 		return (2);
 	}
 	split = ft_split(env_paths, ':');

@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/03 11:30:51 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 23:07:22 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,16 @@ char	**create_envp(char **envp, t_data *data, char *target)
 	return (dup);
 }
 
-char	*create_echo_arg(char *str, t_data *data)
+char	*create_expand(int	flag, char *src, t_data *data)
 {
 	char	*ret;
-	char	**split;
+	char	*temp;
 
-	ret = NULL;
-	if (data->echo_quote == 1)
-		return (str);
-	ret = has_target(data->envp, str + 1);
-	if (!ret)
+	if (flag && src[0] == '$')
 	{
-		if (ft_strnstr(str, "$?", ft_strlen(str)))
-			return (ft_itoa(data->exit_status));
-		else
-			return ("");
+		ret = check_in_env(data->temp, src + 1, data);
+		if (ret)
+			return (ft_strdup(ret));
 	}
-	else
-		return (ret + ft_strlen(str));
+	return (src);
 }
