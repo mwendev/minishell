@@ -6,11 +6,27 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 19:59:35 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/05 20:06:31 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 21:53:30 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	builtin_fd(int cmd_nb, t_data *data, int end)
+{
+	if (!end)
+	{
+		if (dup2(data->pipe_fd[cmd_nb * 2 + 1], STDOUT_FILENO) < 0)
+			return (error(data, "Dup failed", 1, 'e'));
+	}
+	else
+	{
+		if (data->redir_append)
+			redir_fd(data, data->redir_append_fd, 3);
+		else if (data->redir_to)
+			redir_fd(data, data->redir_to_fd, 4);
+	}
+}
 
 char	*trim_target(char *target)
 {

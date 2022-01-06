@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 19:52:06 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/06 21:56:43 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,14 @@ void	execute_pipe(t_data *data);
 /* builtin.c */
 void	change_env(t_data *data, int cmd);
 void	change_directory(t_data *data);
-void	print_echo(t_data *data);
-void	print_env(t_data *data);
+void	dispatch(t_data *data, int cmd_nb, int end, char *arg);
+
 
 /* builtin_utils.c */
 char	*has_target(char **envp, char *target);
 char	*trim_target(char *target);
 char	*get_dir_name(t_data *data);
+void	builtin_fd(int cmd_nb, t_data *data, int end);
 
 /* redirect.c */
 void	redirect(t_data *data);

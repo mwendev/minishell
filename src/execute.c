@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 18:18:30 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 21:58:15 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,23 +57,23 @@ void	execute_fork(t_data *data, int cmd_nb, int end)
 	}
 }
 
-int	is_builtin(char *arg,  t_data *data)
+int	is_builtin(char *arg, t_data *data, int cmd_nb, int end)
 {
 	int	ret;
 
 	ret = 1;
-	if (ft_strlen(arg) == 4 && !ft_strncmp(arg, "echo", ft_strlen(arg)))
-		print_echo(data);
-	else if (ft_strlen(arg) == 2 && !ft_strncmp(arg, "cd", ft_strlen(arg)))
-		change_directory(data);
-	else if (ft_strlen(arg) == 3 && !ft_strncmp(arg, "pwd", ft_strlen(arg)))
-		printf("%s\n", data->path);
+	if (ft_strlen(arg) == 4 && !ft_strncmp(arg, "echo", ft_strlen(arg))
+		|| ft_strlen(arg) == 3 && !ft_strncmp(arg, "pwd", ft_strlen(arg))
+		|| ft_strlen(arg) == 3 && !ft_strncmp(arg, "env", ft_strlen(arg)))
+		dispatch(data, cmd_nb, end, arg);
+	else if (data->pipe_nb)
+		return (0);
 	else if (ft_strlen(arg) == 6 && !ft_strncmp(arg, "export", ft_strlen(arg)))
 		change_env(data, 1);
 	else if (ft_strlen(arg) == 5 && !ft_strncmp(arg, "unset", ft_strlen(arg)))
 		change_env(data, 2);
-	else if (ft_strlen(arg) == 3 && !ft_strncmp(arg, "env", ft_strlen(arg)))
-		print_env(data);
+	else if (ft_strlen(arg) == 2 && !ft_strncmp(arg, "cd", ft_strlen(arg)))
+		change_directory(data);
 	else if (ft_strlen(arg) == 4 && !ft_strncmp(arg, "exit", ft_strlen(arg)))
 		error(data, NULL, 1, 0);
 	else
@@ -87,8 +87,8 @@ void	execute_command(char *cmd, t_data *data, int cmd_nb, int end)
 
 	if (!data->not_valid)
 		data->argv = split_input(cmd, ' ', data);
-	if (!data->not_valid && data->argv[0] && !is_builtin(data->argv[0], data)
-		&& !check_path(data))
+	if (!data->not_valid && data->argv[0]
+		&& !is_builtin(data->argv[0], data, cmd_nb, end) && !check_path(data))
 	{
 		execute_fork(data, cmd_nb, end);
 		if (data->cmd_with_path)

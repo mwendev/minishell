@@ -1,6 +1,4 @@
-export 'HI'=hi success
 export $USER='hi' wrong output
-pipe mix builtin and normal command (env | grep -a USER)
 
 shorten functions
 
