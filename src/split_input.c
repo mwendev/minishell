@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 20:20:13 by aignacz           #+#    #+#             */
-/*   Updated: 2022/01/06 20:34:42 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/06 21:46:37 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,15 +100,16 @@ char	*get_next_word_col(char **pointer_place)
 	return (new_str);
 }
 
-char	*get_next_if_needed(char *pointer, char **pp, int *flag, t_data *data)
+char	*get_next_if_needed(char *pointer, char **pp, t_data *data)
 {
 	char	*temp1;
 	char	*temp2;
+	int		flag;
 
-	while (**pp && **pp != ' ')
+	if (**pp && **pp != ' ')
 	{
-		*pp += 1;
-		temp1 = get_next_word(pp, flag, data);
+		flag = 1;
+		temp1 = get_next_word(pp, &flag, data);
 		temp2 = ft_strjoin(pointer, temp1);
 		free(temp1);
 		free(pointer);
@@ -140,13 +141,19 @@ char	*get_next_word(char **pointer_place, int *flag, t_data *data)
 		inquote = 1;
 		start++;
 	}
+	if (*(pointer + start) == '$')
+		len++;
 	while (*(pointer + start + len) && (*(pointer + start + len) != ch
 			&& (inquote || (*(pointer + start + len) != '"'
-					&& *(pointer + start + len) != '\''))))
+					&& *(pointer + start + len) != '\''
+					&& *(pointer + start + len) != '$'))))
 		len++;
 	*pointer_place = pointer + start + len;
 	pointer = ft_substr(pointer, start, len);
-	pointer = get_next_if_needed(pointer, pointer_place, flag, data);
+	pointer = create_expand(*flag, pointer, data);
+	if (ch != ' ' && **pointer_place == ch)
+		*pointer_place += 1;
+	pointer = get_next_if_needed(pointer, pointer_place, data);
 	return (pointer);
 }
 
