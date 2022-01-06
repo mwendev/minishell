@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 17:53:06 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 22:00:43 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,27 +126,3 @@ int	check_line(t_data *data)
 	}
 	return (1);
 }
-
-/*int	check_line(t_data *data)
-{
-	int		var;
-	int		i;
-	char	*last_pipe;
-	char	*last_quote;
-	char	*last_dquote;
-
-	if (check_quotes(data))
-		return (1);
-	last_pipe = ft_strrchr(data->line, '|');
-	last_dquote = ft_strrchr(data->line, '"');
-	last_quote = ft_strrchr(data->line, '\'');
-	i = 0;
-	var = 0;
-	while (last_pipe && *(last_pipe + i) && !var)
-		var = ft_isalpha((int) *(last_pipe + i++));
-	if (last_pipe == NULL || (last_quote != NULL && last_pipe < last_quote)
-		|| (last_dquote != NULL && last_pipe < last_dquote) || var)
-		return (0);
-	return (1);
-}
-*/

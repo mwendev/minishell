@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:16 by aignacz           #+#    #+#             */
-/*   Updated: 2022/01/06 21:54:24 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 22:01:48 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	print_echo(t_data *data)
 		else
 			printf("%s ", data->argv[i]);
 	}
-	if (data->argv[1] 
+	if (data->argv[1]
 		&& ft_strncmp(data->argv[1], "-n", ft_strlen(data->argv[1])))
 		printf("\n");
 	data->exit_status = 0;
@@ -104,7 +104,6 @@ void	change_env(t_data *data, int cmd)
 	}
 }
 
-
 void	dispatch(t_data *data, int cmd_nb, int end, char *arg)
 {
 	int	old_stdout;
@@ -121,5 +120,5 @@ void	dispatch(t_data *data, int cmd_nb, int end, char *arg)
 	if (dup2(old_stdout, STDOUT_FILENO) < 0)
 		return (error(data, "Dup failed (3)", 1, 'e'));
 	if (cmd_nb >= 1)
-			close_pipe(cmd_nb, data);
+		close_pipe(cmd_nb, data);
 }

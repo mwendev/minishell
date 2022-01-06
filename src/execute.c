@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 21:58:15 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 22:07:52 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,10 @@ int	is_builtin(char *arg, t_data *data, int cmd_nb, int end)
 		|| ft_strlen(arg) == 3 && !ft_strncmp(arg, "env", ft_strlen(arg)))
 		dispatch(data, cmd_nb, end, arg);
 	else if (data->pipe_nb)
+	{
+		printf("%d\n", data->pipe_nb);
 		return (0);
+	}
 	else if (ft_strlen(arg) == 6 && !ft_strncmp(arg, "export", ft_strlen(arg)))
 		change_env(data, 1);
 	else if (ft_strlen(arg) == 5 && !ft_strncmp(arg, "unset", ft_strlen(arg)))

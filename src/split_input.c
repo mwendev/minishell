@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 20:20:13 by aignacz           #+#    #+#             */
-/*   Updated: 2022/01/06 21:46:37 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/06 22:11:45 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,25 +172,22 @@ char	**split_input(char *line, char c, t_data *data)
 	if (c == '|')
 		data->pipe_nb = words;
 	argv = (char **) malloc((words + 1) * sizeof(char *));
-	if (argv)
-	{
-		i = 0;
-		pointer = line;
-		while (i < words)
-		{
-			flag = 1;
-			if (c == '|')
-				*(argv + i) = get_next_word_col(&pointer);
-			else
-			{
-				*(argv + i) = get_next_word(&pointer, &flag, data);
-				*(argv + i) = create_expand(flag, *(argv + i), data);
-			}
-			i++;
-		}
-		*(argv + i) = NULL;
-	}
-	else
+	if (!argv)
 		error(data, "Malloc failed for input data argv\n", 0, 'p');
+	i = 0;
+	pointer = line;
+	while (i < words)
+	{
+		flag = 1;
+		if (c == '|')
+			*(argv + i) = get_next_word_col(&pointer);
+		else
+		{
+			*(argv + i) = get_next_word(&pointer, &flag, data);
+			*(argv + i) = create_expand(flag, *(argv + i), data);
+		}
+		i++;
+	}
+	*(argv + i) = NULL;
 	return (argv);
 }

@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 14:19:11 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 17:33:57 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 22:04:46 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	write_stdin(t_data *data, int fd)
 	if (fd != -1)
 	{
 		while (get_next_line(STDIN_FILENO, line)
-		&& ft_strncmp(*line, eof, ft_strlen(eof)))
+			&& ft_strncmp(*line, eof, ft_strlen(eof)))
 		{
 			if (write(fd, *line, ft_strlen(*line)) == -1
 				|| write(fd, "\n", 1) == -1)
@@ -41,28 +41,28 @@ void	write_stdin(t_data *data, int fd)
 
 void	redir_fd(t_data *data, int fd, int redir_type)
 {
-		if (redir_type == 1)
-		{
-			close(0);
-			fd = open("_tmp", O_RDONLY, 0644);
-		}
-		else if (redir_type == 2)
-		{
-			close(0);
-			fd = open(data->redir_from[0], O_RDONLY, 0644);
-		}
-		if (redir_type == 3)
-		{
-			close(1);
-			fd = open(data->redir_append[0], O_RDWR | O_CREAT | O_APPEND, 0777);
-		}
-		else if (redir_type == 4)
-		{
-			close(1);
-			fd = open(data->redir_to[0], O_RDWR | O_CREAT | O_TRUNC, 0777);
-		}
-		if (fd == -1)
-			error(data, "Open failed", 1, 'e');
+	if (redir_type == 1)
+	{
+		close(0);
+		fd = open("_tmp", O_RDONLY, 0644);
+	}
+	else if (redir_type == 2)
+	{
+		close(0);
+		fd = open(data->redir_from[0], O_RDONLY, 0644);
+	}
+	if (redir_type == 3)
+	{
+		close(1);
+		fd = open(data->redir_append[0], O_RDWR | O_CREAT | O_APPEND, 0777);
+	}
+	else if (redir_type == 4)
+	{
+		close(1);
+		fd = open(data->redir_to[0], O_RDWR | O_CREAT | O_TRUNC, 0777);
+	}
+	if (fd == -1)
+		error(data, "Open failed", 1, 'e');
 }
 
 void	trim_line(t_data *data, char *to_trim)
@@ -134,22 +134,22 @@ char	**get_redir(t_data *data, char c)
 
 void	redirect(t_data *data)
 {
-	if (!ft_strncmp(data->line, "<<", ft_strlen(data->line)) 
+	if (!ft_strncmp(data->line, "<<", ft_strlen(data->line))
 		|| !ft_strncmp(data->line, "<", ft_strlen(data->line))
 		|| !ft_strncmp(data->line, ">>", ft_strlen(data->line))
 		|| !ft_strncmp(data->line, ">", ft_strlen(data->line)))
-		{
-			error(data, "bash: syntax error near unexpected token `newline'\n"
-				, 0, 'p');
-			return ;
-		}
+	{
+		error(data, "bash: syntax error near unexpected token `newline'\n",
+			0, 'p');
+		return ;
+	}
 	if (ft_strnstr(data->line, "<<", ft_strlen(data->line)))
 	{
 		data->redir_stdin = get_redir(data, '<');
 		write_stdin(data, data->redir_stdin_fd);
 		close(data->redir_stdin_fd);
 	}
-	else if	(ft_strchr(data->line, '<'))
+	else if (ft_strchr(data->line, '<'))
 		data->redir_from = get_redir(data, '<');
 	if (ft_strnstr(data->line, ">>", ft_strlen(data->line)))
 		data->redir_append = get_redir(data, '>');
