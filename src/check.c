@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/05 23:58:42 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 17:53:06 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	check_path(t_data *data)
 	env_paths = check_in_env(data->envp, "PATH", data);
 	if (!env_paths)
 	{
-		error(data, "No env path found", 0, 'p');
+		error(data, "No env path found\n", 0, 'p');
 		return (2);
 	}
 	split = ft_split(env_paths, ':');

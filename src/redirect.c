@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 14:19:11 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/05 20:50:06 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 17:33:57 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ char	**get_redir(t_data *data, char c)
 	ret[1] = ft_calloc(len + i + 1, 1);
 	ft_strlcpy(ret[1], data->line + start, i - start + len + 1);
 	trim_line(data, ret[1]);
-	printf("%d %d |%s| |%s| |%s|\n", len, i, ret[0], ret[1], data->line);
 	return (ret);
 }
 

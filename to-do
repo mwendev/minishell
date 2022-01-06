@@ -2,7 +2,7 @@ export 'HI'=hi success
 export $USER='hi' wrong output
 pipe mix builtin and normal command (env | grep -a USER)
 
-sorten functions
+shorten functions
 
 check:
 <to-do uniq -c >abc by chance seg fault
