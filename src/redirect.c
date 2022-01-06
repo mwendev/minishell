@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 14:19:11 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 22:04:46 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 22:57:35 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	write_stdin(t_data *data, int fd)
 
 	i = 0;
 	eof = data->redir_stdin[0];
-	fd = open("_tmp", O_RDWR | O_CREAT, 0777);
+	fd = open("_tmp", O_RDWR | O_CREAT, 0644);
 	if (fd != -1)
 	{
 		while (get_next_line(STDIN_FILENO, line)
@@ -44,22 +44,17 @@ void	redir_fd(t_data *data, int fd, int redir_type)
 	if (redir_type == 1)
 	{
 		close(0);
-		fd = open("_tmp", O_RDONLY, 0644);
-	}
-	else if (redir_type == 2)
-	{
-		close(0);
 		fd = open(data->redir_from[0], O_RDONLY, 0644);
 	}
-	if (redir_type == 3)
+	if (redir_type == 2)
 	{
 		close(1);
-		fd = open(data->redir_append[0], O_RDWR | O_CREAT | O_APPEND, 0777);
+		fd = open(data->redir_append[0], O_RDWR | O_CREAT | O_APPEND, 0644);
 	}
-	else if (redir_type == 4)
+	else if (redir_type == 3)
 	{
 		close(1);
-		fd = open(data->redir_to[0], O_RDWR | O_CREAT | O_TRUNC, 0777);
+		fd = open(data->redir_to[0], O_RDWR | O_CREAT | O_TRUNC, 0644);
 	}
 	if (fd == -1)
 		error(data, "Open failed", 1, 'e');
@@ -148,6 +143,8 @@ void	redirect(t_data *data)
 		data->redir_stdin = get_redir(data, '<');
 		write_stdin(data, data->redir_stdin_fd);
 		close(data->redir_stdin_fd);
+		close(0);
+		data->redir_stdin_fd = open("_tmp", O_RDONLY, 0644);
 	}
 	else if (ft_strchr(data->line, '<'))
 		data->redir_from = get_redir(data, '<');

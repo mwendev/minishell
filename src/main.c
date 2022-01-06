@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 22:08:59 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 22:58:27 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,14 @@ void	initialize(t_data *data, char **environ)
 	data->pipe_nb = 0;
 	data->echo_quote = 0;
 	data->exit_status = 0;
+	data->old_stdin = dup(STDIN_FILENO);
 	//signal_init();
 }
 
 void	destroy(t_data *data)
 {
+	if (dup2(data->old_stdin, STDIN_FILENO) < 0)
+		error(data, "Recover old STDIN failed\n", 1, 'e');
 	if (data->cmd)
 	{
 		free_split(data->cmd);

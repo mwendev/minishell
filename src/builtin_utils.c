@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 19:59:35 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 21:53:30 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 23:07:39 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ void	builtin_fd(int cmd_nb, t_data *data, int end)
 	else
 	{
 		if (data->redir_append)
-			redir_fd(data, data->redir_append_fd, 3);
+			redir_fd(data, data->redir_append_fd, 2);
 		else if (data->redir_to)
-			redir_fd(data, data->redir_to_fd, 4);
+			redir_fd(data, data->redir_to_fd, 3);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 21:56:43 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 22:55:33 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_data
 	int		redir_stdin_fd;
 	int		redir_to_fd;
 	int		redir_append_fd;
+	int		old_stdin;
 	char	**redir_from;
 	char	**redir_stdin;
 	char	**redir_to;

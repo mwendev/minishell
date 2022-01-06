@@ -1,5 +1,6 @@
 export $USER='hi' wrong output
 data->pipe_nb
+<<hi sort | uniq -c | env >> abc seg fault
 
 shorten functions
 

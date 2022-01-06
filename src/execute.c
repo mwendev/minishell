@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 22:07:52 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 23:02:08 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,8 @@ void	execute_fd(int cmd_nb, t_data *data, int end)
 	}
 	else
 	{
-		if (data->redir_stdin)
-			redir_fd(data, data->redir_stdin_fd, 1);
-		else if (data->redir_from)
-			redir_fd(data, data->redir_from_fd, 2);
+		if (data->redir_from)
+			redir_fd(data, data->redir_from_fd, 1);
 	}
 	if (!end)
 	{
@@ -36,9 +34,9 @@ void	execute_fd(int cmd_nb, t_data *data, int end)
 	else
 	{
 		if (data->redir_append)
-			redir_fd(data, data->redir_append_fd, 3);
+			redir_fd(data, data->redir_append_fd, 2);
 		else if (data->redir_to)
-			redir_fd(data, data->redir_to_fd, 4);
+			redir_fd(data, data->redir_to_fd, 3);
 	}
 }
 
@@ -67,10 +65,7 @@ int	is_builtin(char *arg, t_data *data, int cmd_nb, int end)
 		|| ft_strlen(arg) == 3 && !ft_strncmp(arg, "env", ft_strlen(arg)))
 		dispatch(data, cmd_nb, end, arg);
 	else if (data->pipe_nb)
-	{
-		printf("%d\n", data->pipe_nb);
 		return (0);
-	}
 	else if (ft_strlen(arg) == 6 && !ft_strncmp(arg, "export", ft_strlen(arg)))
 		change_env(data, 1);
 	else if (ft_strlen(arg) == 5 && !ft_strncmp(arg, "unset", ft_strlen(arg)))
