@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 23:21:39 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 23:46:04 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,31 @@ void	create_redir_string(t_data *data, char **ret, int i, int *start_len)
 	ret[1] = ft_calloc(start_len[1] + i + 1, 1);
 	ft_strlcpy(ret[1], data->line + start_len[0],
 		i - start_len[0] + start_len[1] + 1);
+}
+
+void	create_stdin(t_data *data, int fd)
+{
+	int		i;
+	char	*line[2048];
+	char	*eof;
+
+	i = 0;
+	eof = data->redir_stdin[0];
+	fd = open("_tmp", O_RDWR | O_CREAT, 0644);
+	if (fd != -1)
+	{
+		while (get_next_line(STDIN_FILENO, line)
+			&& ft_strncmp(*line, eof, ft_strlen(eof)))
+		{
+			if (write(fd, *line, ft_strlen(*line)) == -1
+				|| write(fd, "\n", 1) == -1)
+				return (error(data, "Write failed", 1, 'e'));
+			free(*line);
+			if (++i == 2048)
+				return (error(data, "Max 2048 lines\n", 0, 'p'));
+		}
+		free(*line);
+	}
+	else
+		error(data, "Open failed", 1, 'e');
 }

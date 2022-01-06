@@ -6,38 +6,11 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 14:19:11 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 23:22:42 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/07 00:09:14 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	write_stdin(t_data *data, int fd)
-{
-	int		i;
-	char	*line[2048];
-	char	*eof;
-
-	i = 0;
-	eof = data->redir_stdin[0];
-	fd = open("_tmp", O_RDWR | O_CREAT, 0644);
-	if (fd != -1)
-	{
-		while (get_next_line(STDIN_FILENO, line)
-			&& ft_strncmp(*line, eof, ft_strlen(eof)))
-		{
-			if (write(fd, *line, ft_strlen(*line)) == -1
-				|| write(fd, "\n", 1) == -1)
-				return (error(data, "Write failed", 1, 'e'));
-			free(*line);
-			if (++i == 2048)
-				return (error(data, "Max 2048 lines\n", 0, 'p'));
-		}
-		free(*line);
-	}
-	else
-		error(data, "Open failed", 1, 'e');
-}
 
 void	redir_fd(t_data *data, int fd, int redir_type)
 {
@@ -60,32 +33,42 @@ void	redir_fd(t_data *data, int fd, int redir_type)
 		error(data, "Open failed", 1, 'e');
 }
 
+void	if_to_trim(t_data *data, int *i, int *flag, char *to_trim)
+{
+	int	j;
+
+	j = 0;
+	while (data->line[*i] == to_trim[j])
+	{
+		++*i;
+		++j;
+		if (j == ft_strlen(to_trim))
+		{
+			*flag = 1;
+			break ;
+		}
+	}
+}
+
 void	trim_line(t_data *data, char *to_trim)
 {
 	char	*temp;
-	int		i = -1;
-	int		j = 0;
-	int		k = 0;
-	int		n = -1;
-	int		flag = 0;
+	int		i;
+	int		k;
+	int		flag;
+	int		n;
 
+	i = -1;
+	k = 0;
+	n = -1;
+	flag = 0;
 	temp = ft_calloc(ft_strlen(data->line), 1);
 	if (!temp)
 		error(data, "Malloc failed for new line", 0, 'p');
 	while (data->line[++i])
 	{
 		k = i;
-		while (data->line[i] == to_trim[j])
-		{
-			++i;
-			++j;
-			if (j == ft_strlen(to_trim))
-			{
-				flag = 1;
-				break ;
-			}
-		}
-		j = 0;
+		if_to_trim(data, &i, &flag, to_trim);
 		if (!flag)
 			i = k;
 		else
@@ -120,7 +103,6 @@ char	**get_redir(t_data *data, char c)
 		return (NULL);
 	create_redir_string(data, ret, i, start_len);
 	trim_line(data, ret[1]);
-	printf("|%s| |%s|\n", ret[0], ret[1]);
 	return (ret);
 }
 
@@ -138,7 +120,7 @@ void	redirect(t_data *data)
 	if (ft_strnstr(data->line, "<<", ft_strlen(data->line)))
 	{
 		data->redir_stdin = get_redir(data, '<');
-		write_stdin(data, data->redir_stdin_fd);
+		create_stdin(data, data->redir_stdin_fd);
 		close(data->redir_stdin_fd);
 		close(0);
 		data->redir_stdin_fd = open("_tmp", O_RDONLY, 0644);
