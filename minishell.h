@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/05 23:40:12 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 00:01:29 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ typedef struct s_data
 	char	**cmd;
 	char	path[PATH_MAX];
 	char	prev_dir[PATH_MAX];
-
-	char	**temp;
 }	t_data;
 
 /* main.c */

@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/05 23:07:22 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 00:43:17 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,33 @@ char	**create_envp(char **envp, t_data *data, char *target)
 
 	i = -1;
 	j = -1;
-	dup = (char **)malloc(sizeof(char *) * (data->envp_len + 1));
+	dup = ft_calloc(data->envp_len + 1, sizeof(char *));
 	if (dup)
 	{
-		dup[data->envp_len] = NULL;
 		while (envp[++i])
+		{
 			if (!target || ft_strncmp(envp[i], target, ft_strlen(target)))
 				dup[++j] = ft_strdup(envp[i]);
+		}
 	}
 	else
 		error(data, "Malloc for envp failed", 1, 'e');
 	return (dup);
 }
 
-char	*create_expand(int	flag, char *src, t_data *data)
+char	*create_expand(int flag, char *src, t_data *data)
 {
 	char	*ret;
 	char	*temp;
 
-	if (flag && src[0] == '$')
+	if (flag && src[0] == '$' && ft_strncmp(src, "$?", ft_strlen(src)))
 	{
-		ret = check_in_env(data->temp, src + 1, data);
+		ret = check_in_env(data->envp, src + 1, data);
 		if (ret)
+		{
+			free(src);
 			return (ft_strdup(ret));
+		}
 	}
 	return (src);
 }

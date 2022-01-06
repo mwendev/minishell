@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/05 21:41:36 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 01:50:12 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	read_command_line(t_data *data)
 	if (data->line && *(data->line))
 		add_history(data->line);
 	else
-		error(data, "Read line failed, exiting...\n", 1, 'p');
+		error(data, "Read line failed...\n", 1, 'p');
 	while (check_line(data))
 	{
 		temp1 = ft_strjoin(data->line, "\n");
@@ -80,7 +80,6 @@ int	main(void)
 	t_data		data;
 	extern char	**environ;
 
-	data.temp = environ;
 	initialize(&data, environ);
 	while (1)
 	{

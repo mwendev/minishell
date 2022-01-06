@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:16 by aignacz           #+#    #+#             */
-/*   Updated: 2022/01/05 23:52:41 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 01:42:15 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,15 @@ void	print_echo(t_data *data)
 	else
 		i = 0;
 	while (data->argv[++i])
-		printf("%s ", data->argv[i]);
-	printf("\n");
+	{
+		if (!ft_strncmp(data->argv[i], "$?", ft_strlen(data->argv[1])))
+			printf("%d ", data->exit_status);
+		else
+			printf("%s ", data->argv[i]);
+	}
+	if (data->argv[1] 
+		&& ft_strncmp(data->argv[1], "-n", ft_strlen(data->argv[1])))
+		printf("\n");
 	data->exit_status = 0;
 }
 
@@ -75,6 +82,7 @@ void	change_env(t_data *data, int cmd)
 	i = 0;
 	while (data->argv[++i])
 	{
+		printf("%s\n", data->argv[i]);
 		old = data->envp;
 		if ((!has_target(old, data->argv[i]) && cmd == 2)
 			|| (!ft_strchr(data->argv[i], '=') && cmd == 1)

@@ -1,13 +1,9 @@
-echo with more than 2 args
-• ’ inhibit all interpretation of a sequence of characters.
-• " inhibit all interpretation of a sequence of characters except for $.
-• $? should expand to the exit status of the most recently executed foreground
-pipeline
-• Environment variables ($ followed by characters) should expand to their values.
+export 'HI'=hi success
+export $USER='hi' wrong output
+pipe mix builtin and normal command (env | grep -a USER)
 
-<< seg fault
-trim_line too long
-builtin not working
+sorten functions
 
 check:
 <to-do uniq -c >abc by chance seg fault
+multi argv for unset by chance crash

@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/05 22:40:29 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/05 23:58:42 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*check_in_env(char **envp, char *to_check, t_data *data)
 		}
 	}
 	printf("%s: ", to_check);
-	error(data, "not found in env", 0, 'p');
+	error(data, "not found in env\n", 0, 'p');
 	return (NULL);
 }
 
