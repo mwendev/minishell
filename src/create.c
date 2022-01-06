@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 00:43:17 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 23:21:39 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,13 @@ char	*create_expand(int flag, char *src, t_data *data)
 		}
 	}
 	return (src);
+}
+
+void	create_redir_string(t_data *data, char **ret, int i, int *start_len)
+{
+	ret[0] = ft_calloc(start_len[1] + 1, 1);
+	ft_strlcpy(ret[0], data->line + i, start_len[1] + 1);
+	ret[1] = ft_calloc(start_len[1] + i + 1, 1);
+	ft_strlcpy(ret[1], data->line + start_len[0],
+		i - start_len[0] + start_len[1] + 1);
 }

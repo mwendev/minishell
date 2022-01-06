@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 14:19:11 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 22:57:35 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 23:22:42 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,11 @@ void	trim_line(t_data *data, char *to_trim)
 char	**get_redir(t_data *data, char c)
 {
 	int		i;
-	int		start;
-	int		len;
+	int		start_len[2];
 	char	**ret;
 
 	i = -1;
-	len = 0;
+	start_len[1] = 0;
 	if (!data->line)
 		return (NULL);
 	ret = ft_calloc(3, sizeof(char *));
@@ -112,18 +111,16 @@ char	**get_redir(t_data *data, char c)
 		error(data, "Malloc failed for redirection data", 0, 'p');
 	while (data->line[++i] != c)
 		continue ;
-	start = i;
+	start_len[0] = i;
 	while (data->line[i] == c || data->line[i] == ' ')
 		++i;
-	while (data->line[i + len] && data->line[i + len] != ' ')
-		len++;
-	if (!len)
+	while (data->line[i + start_len[1]] && data->line[i + start_len[1]] != ' ')
+		start_len[1]++;
+	if (!start_len[1])
 		return (NULL);
-	ret[0] = ft_calloc(len + 1, 1);
-	ft_strlcpy(ret[0], data->line + i, len + 1);
-	ret[1] = ft_calloc(len + i + 1, 1);
-	ft_strlcpy(ret[1], data->line + start, i - start + len + 1);
+	create_redir_string(data, ret, i, start_len);
 	trim_line(data, ret[1]);
+	printf("|%s| |%s|\n", ret[0], ret[1]);
 	return (ret);
 }
 

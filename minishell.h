@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 22:55:33 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 23:21:49 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	destroy(t_data *data);
 /* create.c */
 char	**create_envp(char **envp, t_data *data, char *target);
 char	*create_expand(int	flag, char *src, t_data *data);
+void	create_redir_string(t_data *data, char **ret, int i, int *start_len);
 
 /* signal.c */
 void	signal_init(void);
@@ -82,7 +83,6 @@ void	execute_pipe(t_data *data);
 void	change_env(t_data *data, int cmd);
 void	change_directory(t_data *data);
 void	dispatch(t_data *data, int cmd_nb, int end, char *arg);
-
 
 /* builtin_utils.c */
 char	*has_target(char **envp, char *target);
