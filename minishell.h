@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 00:01:29 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 19:52:06 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,8 @@ int		free_split(char **str);
 void	free_pipe(char **pipe_cmd, t_data *data);
 void	close_pipe(int piped, t_data *data);
 void	destroy_redir(t_data *data);
+
+/* split_input.c */
+char	*get_next_word(char **pointer_place, int *flag, t_data *data);
 
 #endif

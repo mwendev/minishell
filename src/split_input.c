@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 20:20:13 by aignacz           #+#    #+#             */
-/*   Updated: 2022/01/06 00:42:23 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/06 20:34:42 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,17 +100,36 @@ char	*get_next_word_col(char **pointer_place)
 	return (new_str);
 }
 
+char	*get_next_if_needed(char *pointer, char **pp, int *flag, t_data *data)
+{
+	char	*temp1;
+	char	*temp2;
+
+	while (**pp && **pp != ' ')
+	{
+		*pp += 1;
+		temp1 = get_next_word(pp, flag, data);
+		temp2 = ft_strjoin(pointer, temp1);
+		free(temp1);
+		free(pointer);
+		pointer = temp2;
+	}
+	return (pointer);
+}
+
 char	*get_next_word(char **pointer_place, int *flag, t_data *data)
 {
 	char	*pointer;
 	char	ch;
 	int		start;
 	int		len;
+	int		inquote;
 
 	pointer = *pointer_place;
 	start = 0;
 	len = 0;
 	ch = ' ';
+	inquote = 0;
 	while (*(pointer + start) == ' ')
 		start++;
 	if (*(pointer + start) == '"' || *(pointer + start) == '\'')
@@ -118,16 +137,17 @@ char	*get_next_word(char **pointer_place, int *flag, t_data *data)
 		if (*(pointer + start) == '\'' && *(pointer + start + 1) == '$')
 			*flag = 0;
 		ch = *(pointer + start);
+		inquote = 1;
 		start++;
 	}
-	while (*(pointer + start + len) && *(pointer + start + len) != ch)
+	while (*(pointer + start + len) && (*(pointer + start + len) != ch
+			&& (inquote || (*(pointer + start + len) != '"'
+					&& *(pointer + start + len) != '\''))))
 		len++;
 	*pointer_place = pointer + start + len;
-	if (**pointer_place)
-		*pointer_place += 1;
-	while (**pointer_place && **pointer_place == ' ')
-		*pointer_place += 1;
-	return (ft_substr(pointer, start, len));
+	pointer = ft_substr(pointer, start, len);
+	pointer = get_next_if_needed(pointer, pointer_place, flag, data);
+	return (pointer);
 }
 
 char	**split_input(char *line, char c, t_data *data)
