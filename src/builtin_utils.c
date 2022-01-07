@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 19:59:35 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 23:07:39 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/07 19:33:10 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,14 @@ char	*has_target(char **envp, char *target)
 			return (ret);
 	}
 	return (ret);
+}
+
+int	change_env_helper(t_data *data, int cmd, int i, char **old)
+{
+	if ((!has_target(old, data->argv[i]) && cmd == 2)
+		|| (!ft_strchr(data->argv[i], '=') && cmd == 1)
+		|| (!ft_strncmp(data->argv[i], "=", 1)))
+		return (1);
+	else
+		return (0);
 }

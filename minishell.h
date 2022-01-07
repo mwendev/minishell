@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 23:46:17 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/07 20:12:37 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	destroy(t_data *data);
 
 /* create.c */
 char	**create_envp(char **envp, t_data *data, char *target);
-char	*create_expand(int	flag, char *src, t_data *data);
+char	*create_expand(int flag, char *src, t_data *data);
 void	create_redir_string(t_data *data, char **ret, int i, int *start_len);
 void	create_stdin(t_data *data, int fd);
 
@@ -90,6 +90,7 @@ char	*has_target(char **envp, char *target);
 char	*trim_target(char *target);
 char	*get_dir_name(t_data *data);
 void	builtin_fd(int cmd_nb, t_data *data, int end);
+int		change_env_helper(t_data *data, int cmd, int i, char **old);
 
 /* redirect.c */
 void	redirect(t_data *data);
@@ -104,5 +105,11 @@ void	destroy_redir(t_data *data);
 
 /* split_input.c */
 char	*get_next_word(char **pointer_place, int *flag, t_data *data);
+
+/* split_input_utils.c */
+int		word_count_col(char *line, char c);
+int		word_count(char *line, char c);
+int		get_len_next_word(char *pointer, int *start, char *ch, int *flag);
+int		get_word_count_helper(char *line, char c);
 
 #endif

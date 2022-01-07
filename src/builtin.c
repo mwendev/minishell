@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:16 by aignacz           #+#    #+#             */
-/*   Updated: 2022/01/06 23:07:15 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/07 19:33:02 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,21 @@ void	change_directory(t_data *data)
 	i = 1;
 	while (data->argv[i] != NULL)
 		i++;
-	if (i > 2)
+	dir = get_dir_name(data);
+	if (i > 2 || chdir(dir) == -1)
 	{
 		data->exit_status = 1;
-		printf("cd: too many arguments\n");
+		if (i > 2)
+			printf("cd: too many arguments\n");
+		else
+			printf("cd: no such file or directory: %s\n", dir);
 	}
 	else
 	{
-		dir = get_dir_name(data);
-		if (chdir(dir) == -1)
-		{
-			data->exit_status = 1;
-			printf("cd: no such file or directory: %s\n", dir);
-		}
-		else
-		{
-			ft_strlcpy(data->prev_dir, data->path, PATH_MAX);
-			getcwd(data->path, PATH_MAX);
-		}
-		free(dir);
+		ft_strlcpy(data->prev_dir, data->path, PATH_MAX);
+		getcwd(data->path, PATH_MAX);
 	}
+	free(dir);
 }
 
 void	print_echo(t_data *data)
@@ -85,9 +80,7 @@ void	change_env(t_data *data, int cmd)
 	while (data->argv[++i])
 	{
 		old = data->envp;
-		if ((!has_target(old, data->argv[i]) && cmd == 2)
-			|| (!ft_strchr(data->argv[i], '=') && cmd == 1)
-			|| (!ft_strncmp(data->argv[i], "=", 1)))
+		if (change_env_helper(data, cmd, i, old))
 			return ;
 		dup = ft_strdup(data->argv[i]);
 		target = trim_target(data->argv[i]);

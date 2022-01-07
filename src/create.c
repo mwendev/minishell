@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 18:29:55 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/07 19:34:29 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ char	*create_expand(int flag, char *src, t_data *data)
 	if (flag && src[0] == '$' && ft_strncmp(src, "$?", ft_strlen(src)))
 	{
 		len = 1;
-		while (*(src + len) && (ft_isalnum((int) *(src + len)) || *(src + len) == '_'))
+		while (*(src + len) && (ft_isalnum((int) *(src + len))
+				|| *(src + len) == '_'))
 			len++;
 		if (len < ft_strlen(src))
 			return (create_expand_helper(src, len, data));
