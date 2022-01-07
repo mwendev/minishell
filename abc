@@ -1,0 +1,8 @@
+
+
+<to-do uniq -c >abc by chance seg fault
+check:
+data->pipe_nb
+export $USER='hi' wrong output
+multi argv for unset by chance crash
+shorten functions

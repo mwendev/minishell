@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 20:00:23 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/07 21:22:19 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,11 @@ void	execute_fd(int cmd_nb, t_data *data, int end)
 			return (error(data, "Dup failed", 1, 'e'));
 		close(data->pipe_fd[(cmd_nb - 1) * 2 + 1]);
 	}
-	else
-	{
-		if (data->redir_from)
-			redir_fd(data, data->redir_from_fd, 1);
-	}
 	if (!end)
 	{
 		if (dup2(data->pipe_fd[cmd_nb * 2 + 1], STDOUT_FILENO) < 0)
 			return (error(data, "Dup failed", 1, 'e'));
 		close(data->pipe_fd[cmd_nb * 2]);
-	}
-	else
-	{
-		if (data->redir_append)
-			redir_fd(data, data->redir_append_fd, 2);
-		else if (data->redir_to)
-			redir_fd(data, data->redir_to_fd, 3);
 	}
 }
 

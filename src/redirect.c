@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 14:19:11 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 00:09:14 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/07 21:35:05 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,28 @@ void	redir_fd(t_data *data, int fd, int redir_type)
 {
 	if (redir_type == 1)
 	{
+		create_stdin(data, fd);
+		close(fd);
+		close(0);
+		fd = open("_tmp", O_RDONLY, 0644);
+	}
+	else if (redir_type == 2)
+	{
 		close(0);
 		fd = open(data->redir_from[0], O_RDONLY, 0644);
 	}
-	if (redir_type == 2)
+	if (redir_type == 3)
 	{
-		close(1);
+		close (1);
 		fd = open(data->redir_append[0], O_RDWR | O_CREAT | O_APPEND, 0644);
 	}
-	else if (redir_type == 3)
+	else if (redir_type == 4)
 	{
-		close(1);
+		close (1);
 		fd = open(data->redir_to[0], O_RDWR | O_CREAT | O_TRUNC, 0644);
 	}
 	if (fd == -1)
-		error(data, "Open failed", 1, 'e');
+		error(data, "Open failed", 0, 'e');
 }
 
 void	if_to_trim(t_data *data, int *i, int *flag, char *to_trim)
@@ -98,7 +105,12 @@ char	**get_redir(t_data *data, char c)
 	while (data->line[i] == c || data->line[i] == ' ')
 		++i;
 	while (data->line[i + start_len[1]] && data->line[i + start_len[1]] != ' ')
+	{
 		start_len[1]++;
+		if (data->line[i + start_len[1]] == '>'
+			|| data->line[i + start_len[1]] == '<')
+			break ;
+	}
 	if (!start_len[1])
 		return (NULL);
 	create_redir_string(data, ret, i, start_len);
@@ -120,15 +132,21 @@ void	redirect(t_data *data)
 	if (ft_strnstr(data->line, "<<", ft_strlen(data->line)))
 	{
 		data->redir_stdin = get_redir(data, '<');
-		create_stdin(data, data->redir_stdin_fd);
-		close(data->redir_stdin_fd);
-		close(0);
-		data->redir_stdin_fd = open("_tmp", O_RDONLY, 0644);
+		redir_fd(data, data->redir_stdin_fd, 1);
 	}
 	else if (ft_strchr(data->line, '<'))
+	{
 		data->redir_from = get_redir(data, '<');
+		redir_fd(data, data->redir_from_fd, 2);
+	}
 	if (ft_strnstr(data->line, ">>", ft_strlen(data->line)))
+	{
 		data->redir_append = get_redir(data, '>');
+		redir_fd(data, data->redir_append_fd, 3);
+	}
 	else if (ft_strchr(data->line, '>'))
+	{
 		data->redir_to = get_redir(data, '>');
+		redir_fd(data, data->redir_to_fd, 4);
+	}
 }

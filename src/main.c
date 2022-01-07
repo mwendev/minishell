@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 20:00:04 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/07 21:10:01 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	initialize(t_data *data, char **environ)
 	data->echo_quote = 0;
 	data->exit_status = 0;
 	data->old_stdin = dup(STDIN_FILENO);
+	data->old_stdout = dup(STDOUT_FILENO);
 	//signal_init();
 }
 
@@ -41,6 +42,8 @@ void	destroy(t_data *data)
 {
 	if (dup2(data->old_stdin, STDIN_FILENO) < 0)
 		error(data, "Recover old STDIN failed\n", 1, 'e');
+	if (dup2(data->old_stdout, STDOUT_FILENO) < 0)
+		error(data, "Recover old STDOUT failed\n", 1, 'e');
 	if (data->cmd)
 	{
 		free_split(data->cmd);
@@ -53,6 +56,7 @@ void	destroy(t_data *data)
 	}
 	destroy_redir(data);
 	data->not_valid = 0;
+	data->pipe_fd = 0;
 }
 
 void	read_command_line(t_data *data)
@@ -65,8 +69,6 @@ void	read_command_line(t_data *data)
 	free(temp1);
 	if (data->line && *(data->line))
 		add_history(data->line);
-	else
-		error(data, "Read line failed...\n", 1, 'p');
 	while (check_line(data))
 	{
 		temp1 = ft_strjoin(data->line, "\n");
@@ -88,12 +90,15 @@ int	main(void)
 	{
 		getcwd(data.path, PATH_MAX);
 		read_command_line(&data);
-		redirect(&data);
-		data.cmd = split_input(data.line, '|', &data);
-		if (*(data.cmd) && *(data.cmd + 1))
-			execute_pipe(&data);
-		else if (*(data.cmd))
-			execute_command(data.cmd[0], &data, -1, 1);
+		if (data.line && *(data.line))
+		{
+			redirect(&data);
+			data.cmd = split_input(data.line, '|', &data);
+			if (*(data.cmd) && *(data.cmd + 1))
+				execute_pipe(&data);
+			else if (*(data.cmd))
+				execute_command(data.cmd[0], &data, -1, 1);
+		}
 		destroy(&data);
 	}
 	free_split(data.envp);
