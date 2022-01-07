@@ -1,7 +1,11 @@
-
-
-
-<to-do uniq -c >abc by chance seg fault
-check:
-multi argv for unset by chance crash
-shorten functions
+Makefile
+abc
+evalminishell
+example_minishell
+get_next_line.h
+libft
+minishell
+minishell.h
+obj
+src
+to-do

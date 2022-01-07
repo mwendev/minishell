@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 21:44:59 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/07 22:39:16 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,6 @@ void	initialize(t_data *data, char **environ)
 
 void	destroy(t_data *data)
 {
-	if (dup2(data->old_stdin, STDIN_FILENO) < 0)
-		error(data, "Recover old STDIN failed\n", 1, 'e');
-	if (dup2(data->old_stdout, STDOUT_FILENO) < 0)
-		error(data, "Recover old STDOUT failed\n", 1, 'e');
 	if (data->cmd)
 	{
 		free_split(data->cmd);
@@ -55,6 +51,10 @@ void	destroy(t_data *data)
 		data->line = NULL;
 	}
 	destroy_redir(data);
+	if (dup2(data->old_stdin, STDIN_FILENO) < 0)
+		error(data, "Recover old STDIN failed\n", 1, 'e');
+	if (dup2(data->old_stdout, STDOUT_FILENO) < 0)
+		error(data, "Recover old STDOUT failed\n", 1, 'e');
 	data->not_valid = 0;
 	data->pipe_nb = 0;
 }
@@ -69,7 +69,7 @@ void	read_command_line(t_data *data)
 	free(temp1);
 	if (data->line && *(data->line))
 		add_history(data->line);
-	while (check_line(data))
+	while (data->line && check_line(data))
 	{
 		temp1 = ft_strjoin(data->line, "\n");
 		free(data->line);

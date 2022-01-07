@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 21:40:22 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/07 22:35:46 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,9 @@ int		change_env_helper(t_data *data, int cmd, int i, char **old);
 
 /* redirect.c */
 void	redirect(t_data *data);
-void	redir_fd(t_data *data, int fd, int redir_type);
+
+/* redirect_utils.c */
+char	**get_redir(t_data *data, char c);
 
 /* error.c */
 void	error(t_data *data, char *str, int end, char type);

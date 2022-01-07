@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 21:39:20 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/07 22:29:20 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ char	**create_redir_string(t_data *data, char **ret, int i, int *start_len)
 {
 	if (!start_len[1])
 		return (NULL);
+	ret = ft_calloc(3, sizeof(char *));
+	if (!ret)
+		error(data, "Malloc failed for redirection data", 0, 'p');
 	ret[0] = ft_calloc(start_len[1] + 1, 1);
 	ft_strlcpy(ret[0], data->line + i, start_len[1] + 1);
 	ret[1] = ft_calloc(start_len[1] + i + 1, 1);
