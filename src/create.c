@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/06 23:46:04 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/07 18:29:55 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,46 @@ char	**create_envp(char **envp, t_data *data, char *target)
 	return (dup);
 }
 
+char	*create_expand_helper(char *src, size_t len, t_data *data)
+{
+	char	*temp;
+	char	*ret;
+
+	temp = ft_substr(src, 1, len - 1);
+	ret = check_in_env(data->envp, temp, data);
+	free(temp);
+	if (ret)
+	{
+		ret = ft_strdup(ret);
+		temp = ft_substr(src, len, ft_strlen(src) - len);
+		free(src);
+		src = ft_strjoin(ret, temp);
+		free(ret);
+		free(temp);
+	}
+	return (src);
+}
+
 char	*create_expand(int flag, char *src, t_data *data)
 {
 	char	*ret;
-	char	*temp;
+	size_t	len;
 
 	if (flag && src[0] == '$' && ft_strncmp(src, "$?", ft_strlen(src)))
 	{
-		ret = check_in_env(data->envp, src + 1, data);
-		if (ret)
+		len = 1;
+		while (*(src + len) && (ft_isalnum((int) *(src + len)) || *(src + len) == '_'))
+			len++;
+		if (len < ft_strlen(src))
+			return (create_expand_helper(src, len, data));
+		else
 		{
-			free(src);
-			return (ft_strdup(ret));
+			ret = check_in_env(data->envp, src + 1, data);
+			if (ret)
+			{
+				free(src);
+				return (ft_strdup(ret));
+			}
 		}
 	}
 	return (src);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 20:20:13 by aignacz           #+#    #+#             */
-/*   Updated: 2022/01/06 22:11:45 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/07 18:49:09 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ char	**split_input(char *line, char c, t_data *data)
 		words = word_count_col(line, c);
 	else
 		words = word_count(line, c);
-	if (c == '|')
+	if (c == '|' && words != 1)
 		data->pipe_nb = words;
 	argv = (char **) malloc((words + 1) * sizeof(char *));
 	if (!argv)
