@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:08:04 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 22:45:37 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/08 00:20:37 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	check_envplen(char **envp)
 	return (len);
 }
 
-char	*check_in_env(char **envp, char *to_check, t_data *data)
+char	*check_in_env(char **envp, char *to_check, t_data *data, int print)
 {
 	int		i;
 	int		j;
@@ -40,8 +40,11 @@ char	*check_in_env(char **envp, char *to_check, t_data *data)
 			return (expanded_value);
 		}
 	}
-	printf("%s: ", to_check);
-	error(data, "not found in env\n", 0, 'p');
+	if (print)
+	{
+		printf("%s: ", to_check);
+		error(data, "not found in env\n", 0, 'p');
+	}
 	return (NULL);
 }
 
@@ -80,7 +83,7 @@ int	check_path(t_data *data)
 	int		i;
 
 	i = -1;
-	env_paths = check_in_env(data->envp, "PATH", data);
+	env_paths = check_in_env(data->envp, "PATH", data, 1);
 	if (!env_paths)
 		return (2);
 	split = ft_split(env_paths, ':');
@@ -91,6 +94,8 @@ int	check_path(t_data *data)
 		free_split(split);
 		data->not_valid = 1;
 		data->exit_status = 127;
+		if (dup2(data->old_stdout, STDOUT_FILENO) < 0)
+			error(data, "Recover old STDOUT failed\n", 1, 'e');
 		return (printf("%s: command not found\n", data->argv[0]));
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 22:29:20 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/08 00:22:05 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*create_expand_helper(char *src, size_t len, t_data *data)
 	char	*ret;
 
 	temp = ft_substr(src, 1, len - 1);
-	ret = check_in_env(data->envp, temp, data);
+	ret = check_in_env(data->envp, temp, data, 0);
 	free(temp);
 	if (ret)
 	{
@@ -69,7 +69,7 @@ char	*create_expand(int flag, char *src, t_data *data)
 			return (create_expand_helper(src, len, data));
 		else
 		{
-			ret = check_in_env(data->envp, src + 1, data);
+			ret = check_in_env(data->envp, src + 1, data, 0);
 			if (ret)
 			{
 				free(src);

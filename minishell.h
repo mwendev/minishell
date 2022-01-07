@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 22:35:46 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/08 00:19:07 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	signal_init(void);
 int		check_path(t_data *data);
 int		check_line(t_data *data);
 int		check_envplen(char **envp);
-char	*check_in_env(char **envp, char *to_check, t_data *data);
+char	*check_in_env(char **envp, char *to_check, t_data *data, int print);
 
 /* execute.c */
 void	execute_command(char *cmd, t_data *data, int cmd_nb, int end);
