@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 21:05:32 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/07 21:44:25 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,22 +45,26 @@ void	destroy_redir(t_data *data)
 {
 	if (data->redir_from)
 	{
+		close(data->redir_from_fd);
 		free_split(data->redir_from);
 		data->redir_from = NULL;
 	}
 	else if (data->redir_stdin)
 	{
+		close(data->redir_stdin_fd);
 		unlink("_tmp");
 		free_split(data->redir_stdin);
 		data->redir_stdin = NULL;
 	}
 	if (data->redir_append)
 	{
+		close(data->redir_append_fd);
 		free_split(data->redir_append);
 		data->redir_append = NULL;
 	}
 	else if (data->redir_to)
 	{
+		close(data->redir_to_fd);
 		free_split(data->redir_to);
 		data->redir_to = NULL;
 	}

@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 20:43:36 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/07 21:40:22 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	destroy(t_data *data);
 /* create.c */
 char	**create_envp(char **envp, t_data *data, char *target);
 char	*create_expand(int flag, char *src, t_data *data);
-void	create_redir_string(t_data *data, char **ret, int i, int *start_len);
+char	**create_redir_string(t_data *data, char **ret, int i, int *start_len);
 void	create_stdin(t_data *data, int fd);
 
 /* signal.c */

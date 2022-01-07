@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 14:19:11 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 21:35:05 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/07 21:45:58 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,6 @@ char	**get_redir(t_data *data, char c)
 
 	i = -1;
 	start_len[1] = 0;
-	if (!data->line)
-		return (NULL);
 	ret = ft_calloc(3, sizeof(char *));
 	if (!ret)
 		error(data, "Malloc failed for redirection data", 0, 'p');
@@ -111,9 +109,7 @@ char	**get_redir(t_data *data, char c)
 			|| data->line[i + start_len[1]] == '<')
 			break ;
 	}
-	if (!start_len[1])
-		return (NULL);
-	create_redir_string(data, ret, i, start_len);
+	ret = create_redir_string(data, ret, i, start_len);
 	trim_line(data, ret[1]);
 	return (ret);
 }
