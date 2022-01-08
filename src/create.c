@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/08 00:22:05 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/08 01:21:29 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,23 @@ char	**create_envp(char **envp, t_data *data, char *target)
 	int		i;
 	int		j;
 	char	**dup;
+	char	**split;
 
 	i = -1;
 	j = -1;
+	printf("%d\n", data->envp_len);
 	dup = ft_calloc(data->envp_len + 1, sizeof(char *));
 	if (dup)
 	{
 		while (envp[++i])
 		{
-			if (!target || ft_strncmp(envp[i], target, ft_strlen(target)))
+			split = ft_split(envp[i], '=');
+			if (target && !ft_strncmp(target, split[0], ft_strlen(target))
+				&& ft_strlen(target) == ft_strlen(split[0]))
+				continue ;
+			else
 				dup[++j] = ft_strdup(envp[i]);
+			free_split(split);
 		}
 	}
 	else

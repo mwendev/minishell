@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 19:59:35 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 22:38:25 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/08 01:13:04 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,24 @@ char	*get_dir_name(t_data *data)
 	return (dir);
 }
 
-char	*has_target(char **envp, char *target)
+int	has_target(char **envp, char *target)
 {
-	char	*ret;
 	int		i;
+	char	**split;
 
 	i = -1;
-	ret = NULL;
 	while (envp[++i])
 	{
-		ret = ft_strnstr(envp[i], target, ft_strlen(envp[i]));
-		if (ret)
-			return (ret);
+		split = ft_split(envp[i], '=');
+		if (!ft_strncmp(target, split[0], ft_strlen(target))
+			&& ft_strlen(target) == ft_strlen(split[0]))
+		{
+			free_split(split);
+			return (1);
+		}
+		free_split(split);
 	}
-	return (ret);
+	return (0);
 }
 
 int	change_env_helper(t_data *data, int cmd, int i, char **old)
