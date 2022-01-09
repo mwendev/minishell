@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/08 00:19:07 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/08 00:59:46 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	change_directory(t_data *data);
 void	dispatch(t_data *data, int cmd_nb, int end, char *arg);
 
 /* builtin_utils.c */
-char	*has_target(char **envp, char *target);
+int		has_target(char **envp, char *target);
 char	*trim_target(char *target);
 char	*get_dir_name(t_data *data);
 void	builtin_fd(int cmd_nb, t_data *data, int end);
