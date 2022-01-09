@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/08 00:22:05 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/08 00:49:52 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ char	*create_expand_helper(char *src, size_t len, t_data *data)
 		src = ft_strjoin(ret, temp);
 		free(ret);
 		free(temp);
+	}
+	else
+	{
+		temp = ft_substr(src, len, ft_strlen(src) - len);
+		free(src);
+		src = temp;
 	}
 	return (src);
 }

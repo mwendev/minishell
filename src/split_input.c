@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 20:20:13 by aignacz           #+#    #+#             */
-/*   Updated: 2022/01/07 20:12:47 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/08 00:50:33 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ char	*get_next_if_needed(char *pointer, char **pp, t_data *data)
 char	*get_next_word(char **pointer_place, int *flag, t_data *data)
 {
 	char	*pointer;
+	char	*sub;
 	char	ch;
 	int		start;
 	int		len;
@@ -72,7 +73,14 @@ char	*get_next_word(char **pointer_place, int *flag, t_data *data)
 		start++;
 	len = get_len_next_word(pointer, &start, &ch, flag);
 	*pointer_place = pointer + start + len;
-	pointer = create_expand(*flag, ft_substr(pointer, start, len), data);
+	sub = ft_substr(pointer, start, len);
+	pointer = create_expand(*flag, sub, data);
+	if (*flag && pointer[0] == '$' && ft_strncmp(pointer, "$?", ft_strlen(pointer))
+		&& !ft_strncmp(sub, pointer, ft_strlen(pointer)))
+	{
+		pointer = ft_strdup("");
+		free(sub);
+	}
 	if (ch != ' ' && **pointer_place == ch)
 		*pointer_place += 1;
 	pointer = get_next_if_needed(pointer, pointer_place, data);
