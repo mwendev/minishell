@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/10 16:40:22 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/10 17:39:44 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,15 @@ char	*create_expand(int flag, char *src, t_data *data)
 	char	*ret;
 	size_t	len;
 
-	if (flag && src[0] == '$' && ft_strncmp(src, "$?", ft_strlen(src)))
+	if (flag && src[0] == '$')
 	{
 		len = 1;
 		while (*(src + len) && (ft_isalnum((int) *(src + len))
 				|| *(src + len) == '_'))
 			len++;
-		if (len < ft_strlen(src))
+		if (ft_strlen(src) == 2 && !ft_strncmp(src, "$?", ft_strlen(src)))
+			return (ft_itoa(data->exit_status));
+		else if (len < ft_strlen(src))
 			return (create_expand_helper(src, len, data));
 		else
 		{
@@ -86,7 +88,7 @@ char	*create_expand(int flag, char *src, t_data *data)
 			if (ret)
 				return (ft_strdup(ret));
 			else
-				return (ft_strdup(""));
+				return (NULL);
 		}
 	}
 	return (src);

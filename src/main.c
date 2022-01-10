@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/10 16:24:58 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/10 17:03:36 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	initialize(t_data *data, char **environ)
 	data->exit_status = 0;
 	data->old_stdin = dup(STDIN_FILENO);
 	data->old_stdout = dup(STDOUT_FILENO);
-	//signal_init();
+	signal_init();
 }
 
 void	destroy(t_data *data)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 21:44:25 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/10 17:39:03 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	error(t_data *data, char *str, int end, char type)
 		perror(str);
 	else if (str && type == 'p')
 		printf("%s", str);
+	data->exit_status = 1;
 	data->not_valid = 1;
 	if (end)
 	{

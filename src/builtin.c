@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:16 by aignacz           #+#    #+#             */
-/*   Updated: 2022/01/10 15:19:55 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/10 17:40:29 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,7 @@ void	print_echo(t_data *data)
 	else
 		i = 0;
 	while (data->argv[++i])
-	{
-		if (ft_strlen(data->argv[1]) == 2
-			&& !ft_strncmp(data->argv[i], "$?", ft_strlen(data->argv[1])))
-			printf("%d ", data->exit_status);
-		else
-			printf("%s ", data->argv[i]);
-	}
+		printf("%s ", data->argv[i]);
 	if (flag)
 		printf("\n");
 	data->exit_status = 0;
