@@ -6,7 +6,11 @@
 /*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/01/09 16:39:05 by aignacz          ###   ########.fr       */
+=======
+/*   Updated: 2022/01/10 15:29:26 by mwen             ###   ########.fr       */
+>>>>>>> 493d741a6b1b29a9199a25b3b0e76dd1936725ee
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +86,11 @@ char	*create_expand(int flag, char *src, t_data *data)
 		else
 		{
 			ret = check_in_env(data->envp, src + 1, data, 0);
+			free(src);
 			if (ret)
-			{
-				free(src);
 				return (ft_strdup(ret));
-			}
+			else
+				return (NULL);
 		}
 	}
 	return (src);

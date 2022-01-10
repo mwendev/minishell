@@ -6,7 +6,7 @@
 /*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:16 by aignacz           #+#    #+#             */
-/*   Updated: 2022/01/08 00:31:07 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/10 15:19:55 by mwen             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,31 @@ void	change_directory(t_data *data)
 void	print_echo(t_data *data)
 {
 	int	i;
+	int	flag;
 
+	flag = 1;
 	if (!data->argv[1])
+	{
+		printf("\n");
 		return ;
-	if (!ft_strncmp(data->argv[1], "-n", ft_strlen(data->argv[1])))
+	}
+	if (ft_strlen(data->argv[1]) == 2
+		&& !ft_strncmp(data->argv[1], "-n", ft_strlen(data->argv[1])))
+	{
+		flag = 0;
 		i = 1;
+	}
 	else
 		i = 0;
 	while (data->argv[++i])
 	{
-		if (!ft_strncmp(data->argv[i], "$?", ft_strlen(data->argv[1])))
+		if (ft_strlen(data->argv[1]) == 2
+			&& !ft_strncmp(data->argv[i], "$?", ft_strlen(data->argv[1])))
 			printf("%d ", data->exit_status);
 		else
 			printf("%s ", data->argv[i]);
 	}
-	if (data->argv[1]
-		&& ft_strncmp(data->argv[1], "-n", ft_strlen(data->argv[1])))
+	if (flag)
 		printf("\n");
 	data->exit_status = 0;
 }
