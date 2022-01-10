@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:12:23 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/08 00:59:46 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/10 21:11:56 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ int		change_env_helper(t_data *data, int cmd, int i, char **old);
 void	redirect(t_data *data);
 
 /* redirect_utils.c */
-char	**get_redir(t_data *data, char c);
+char	**get_redir(t_data *data, char *c);
+char	*is_redir(char *line, char *str);
 
 /* error.c */
 void	error(t_data *data, char *str, int end, char type);

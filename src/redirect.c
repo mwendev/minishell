@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/29 14:19:11 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 22:36:20 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/10 21:11:33 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,18 @@ void	redir_fd(t_data *data, int fd, int redir_type)
 
 void	redirect_input(t_data *data)
 {
-	if (ft_strnstr(data->line, "<<", ft_strlen(data->line)))
+	if (is_redir(data->line, "<<"))
 	{
-		data->redir_stdin = get_redir(data, '<');
+		data->redir_stdin = get_redir(data, "<<");
 		if (data->redir_stdin)
 			redir_fd(data, data->redir_stdin_fd, 1);
 		else
 			error(data, "bash: syntax error near unexpected token `newline'\n",
 				0, 'p');
 	}
-	else if (ft_strchr(data->line, '<'))
+	else if (is_redir(data->line, "<"))
 	{
-		data->redir_from = get_redir(data, '<');
+		data->redir_from = get_redir(data, "<");
 		if (data->redir_from)
 			redir_fd(data, data->redir_from_fd, 2);
 		else
@@ -64,18 +64,18 @@ void	redirect_input(t_data *data)
 
 void	redirect_output(t_data *data)
 {
-	if (ft_strnstr(data->line, ">>", ft_strlen(data->line)))
+	if (is_redir(data->line, ">>"))
 	{
-		data->redir_append = get_redir(data, '>');
+		data->redir_append = get_redir(data, ">>");
 		if (data->redir_append)
 			redir_fd(data, data->redir_append_fd, 3);
 		else
 			error(data, "bash: syntax error near unexpected token `newline'\n",
 				0, 'p');
 	}
-	else if (ft_strchr(data->line, '>'))
+	else if (is_redir(data->line, ">"))
 	{
-		data->redir_to = get_redir(data, '>');
+		data->redir_to = get_redir(data, ">");
 		if (data->redir_to)
 			redir_fd(data, data->redir_to_fd, 4);
 		else

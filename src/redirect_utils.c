@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 22:19:19 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/07 22:35:33 by mwen             ###   ########.fr       */
+/*   Updated: 2022/01/10 21:11:44 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,62 @@ void	trim_line(t_data *data, char *to_trim)
 	data->line = temp;
 }
 
-char	**get_redir(t_data *data, char c)
+int	is_it_inquote(char *line, char *str)
+{
+	char	*p;
+	int		inqoute;
+	char	c;
+
+	p = line;
+	inqoute = 0;
+	c = '"';
+	while (p != str)
+	{
+		if (!inqoute && (*p == '\'' || *p == '"'))
+		{
+			inqoute = 1;
+			c = *p;
+		}
+		else if (inqoute && *p == c)
+			inqoute = 0;
+		p++;
+	}
+	return (inqoute);
+}
+
+char	*is_redir(char *line, char *str)
+{
+	char	*p;
+	char	*pp;
+	int		end;
+
+	pp = line;
+	end = 0;
+	while (*pp && !end)
+	{
+		p = ft_strnstr(pp, str, ft_strlen(pp));
+		if (p != 0 && is_it_inquote(line, p))
+			pp = p + ft_strlen(str);
+		else
+			end = 1;
+	}
+	return (p);
+}
+
+char	**get_redir(t_data *data, char *c)
 {
 	int		i;
 	int		start_len[2];
 	char	**ret;
+	char	*p;
 
 	i = -1;
 	start_len[1] = 0;
-	while (data->line[++i] != c)
+	p = is_redir(data->line, c);
+	while ((data->line + ++i) != p)
 		continue ;
 	start_len[0] = i;
-	while (data->line[i] == c || data->line[i] == ' ')
+	while (data->line[i] == *c || data->line[i] == ' ')
 		++i;
 	while (data->line[i + start_len[1]] && data->line[i + start_len[1]] != ' ')
 	{
