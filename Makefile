@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mwen <mwen@student.42wolfsburg.de>         +#+  +:+       +#+         #
+#    By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/11 13:50:28 by mwen              #+#    #+#              #
-#    Updated: 2022/01/07 22:26:13 by mwen             ###   ########.fr        #
+#    Updated: 2022/01/10 23:26:20 by aignacz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			=	minishell
 CC				=	clang
-CFLAGS			=	-Wall -Wextra -Werror -g 
+CFLAGS			=	-Wall -Wextra -Werror -g
 RM				=	rm -rf
 INCLUDE			=	libft/libft.h minishell.h
 
@@ -30,6 +30,18 @@ OBJS			=	$(addprefix $(OBJS_DIR), $(OBJS_LIST)) $(GNL:.c=.o)
 LIBFT			=	$(LIBFT_DIR)libft.a
 LIBFT_DIR		=	libft/
 
+UNAME			=	$(shell uname)
+
+ifeq ($(UNAME), Darwin)
+	LDFLAGS  		=   -L/usr/local/opt/readline/lib
+	CPPFLAGS 		=   -I/usr/local/opt/readline/include
+else
+	LDFLAGS  		=   
+	CPPFLAGS 		=   
+endif
+
+RLFLAG			=	-lreadline
+
 GREEN			=	\033[0;32m
 RED				=	\033[0;31m
 RESET			=	\033[0m
@@ -37,13 +49,13 @@ RESET			=	\033[0m
 all:			$(NAME)
 
 $(NAME):		$(LIBFT) $(OBJS_DIR) $(OBJS)
-				@$(CC) $(FLAGS) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
+				@$(CC) $(CFLAGS) $(OBJS) $(CPPFLAGS) $(LDFLAGS) $(RLFLAG) $(LIBFT) -o $(NAME)
 
 $(OBJS_DIR):
 				@mkdir -p $(OBJS_DIR)
 
 $(OBJS_DIR)%.o:	$(SRCS_DIR)%.c 
-				@$(CC) $(FLAGS) -c -I$(SRCS_DIR) $< -o $@
+				@$(CC) $(CFLAGS) $(CPPFLAGS) -c -I$(SRCS_DIR) $< -o $@
 
 $(LIBFT):
 				@echo "$(GREEN)Compiling $(LIBFT)...$(RESET)"

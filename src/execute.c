@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 22:14:14 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/10 16:29:33 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/10 21:44:11 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ int	is_builtin(char *arg, t_data *data, int cmd_nb, int end)
 	int	ret;
 
 	ret = 1;
-	if (ft_strlen(arg) == 4 && !ft_strncmp(arg, "echo", ft_strlen(arg))
-		|| ft_strlen(arg) == 3 && !ft_strncmp(arg, "pwd", ft_strlen(arg))
-		|| ft_strlen(arg) == 3 && !ft_strncmp(arg, "env", ft_strlen(arg)))
+	if ((ft_strlen(arg) == 4 && !ft_strncmp(arg, "echo", ft_strlen(arg)))
+		|| (ft_strlen(arg) == 3 && !ft_strncmp(arg, "pwd", ft_strlen(arg)))
+		|| (ft_strlen(arg) == 3 && !ft_strncmp(arg, "env", ft_strlen(arg))))
 		dispatch(data, cmd_nb, end, arg);
 	else if (data->pipe_nb)
 		return (0);

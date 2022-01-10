@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 22:19:19 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/10 21:11:44 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/10 21:59:17 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	if_to_trim(t_data *data, int *i, int *flag, char *to_trim)
 {
-	int	j;
+	size_t	j;
 
 	j = 0;
 	while (data->line[*i] == to_trim[j])
@@ -122,6 +122,7 @@ char	**get_redir(t_data *data, char *c)
 			|| data->line[i + start_len[1]] == '<')
 			break ;
 	}
+	ret = NULL;
 	ret = create_redir_string(data, ret, i, start_len);
 	if (ret)
 		trim_line(data, ret[1]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/11 17:30:54 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/10 17:39:03 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/10 23:41:47 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	error(t_data *data, char *str, int end, char type)
 	if (end)
 	{
 		destroy(data);
+		free_split(data->envp);
 		exit(EXIT_FAILURE);
 	}
 	else

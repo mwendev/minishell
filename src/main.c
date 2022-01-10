@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: aignacz <aignacz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 23:13:07 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/10 17:03:36 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/10 23:42:30 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,13 @@ void	read_command_line(t_data *data)
 	}
 }
 
+void	exit_minishell(t_data *data)
+{
+	destroy(data);
+	free_split(data->envp);
+	exit(0);
+}
+
 int	main(void)
 {
 	t_data		data;
@@ -99,6 +106,8 @@ int	main(void)
 			else if (*(data.cmd))
 				execute_command(data.cmd[0], &data, -1, 1);
 		}
+		if (data.line == NULL)
+			exit_minishell(&data);
 		destroy(&data);
 	}
 	free_split(data.envp);
