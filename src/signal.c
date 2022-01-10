@@ -6,7 +6,7 @@
 /*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/19 13:39:15 by mwen              #+#    #+#             */
-/*   Updated: 2022/01/09 16:41:52 by aignacz          ###   ########.fr       */
+/*   Updated: 2022/01/10 16:47:57 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	signal_handler(int signum, siginfo_t *info, void *unused)
 	if (signum == SIGINT)
 	{
 		printf("\b\b  \n");
-		rl_replace_line("", 0);
+		//rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}

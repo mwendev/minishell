@@ -6,11 +6,7 @@
 /*   By: aignacz <aignacz@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 14:09:54 by mwen              #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/01/09 16:39:05 by aignacz          ###   ########.fr       */
-=======
-/*   Updated: 2022/01/10 15:29:26 by mwen             ###   ########.fr       */
->>>>>>> 493d741a6b1b29a9199a25b3b0e76dd1936725ee
+/*   Updated: 2022/01/10 16:40:22 by aignacz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +86,7 @@ char	*create_expand(int flag, char *src, t_data *data)
 			if (ret)
 				return (ft_strdup(ret));
 			else
-				return (NULL);
+				return (ft_strdup(""));
 		}
 	}
 	return (src);
