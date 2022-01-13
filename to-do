@@ -1,7 +1,0 @@
-
-
-shorten functions
-
-check:
-<to-do uniq -c >abc by chance seg fault
-multi argv for unset by chance crash
