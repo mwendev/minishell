@@ -1,5 +1,6 @@
 # minishell
 
+![Screen Shot 2022-04-22 at 11 50 53 AM](https://user-images.githubusercontent.com/83368424/164683038-910ac2a9-0f06-490e-9fee-af61bbe76fcf.png)
 ## Info
 
 A simpler version of shell in C.
