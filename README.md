@@ -11,7 +11,7 @@ A simpler version of shell in C.
 ## Minishell can
 
 - Have a working history.
-- Search and launch the right executable (based on the PATH variable or using a relative or an absolute path).
+- Search and launch the right executable of commands (based on the PATH variable or using a relative or an absolute path).
 - Handle `’` which should prevent the shell from interpreting the metacharacters in the quoted sequence.
 - Handle `"` which should prevent the shell from interpreting the metacharacters in the quoted sequence except for $ (dollar sign).
 - Handle redirections `>`, `<`, `>>`, `<<`.
